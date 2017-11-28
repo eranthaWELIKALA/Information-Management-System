@@ -1,93 +1,220 @@
-<!DOCTYPE html>
-<?php session_start(); session_destroy(); ?>
-<html><head><title>Home</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
-	<link rel="stylesheet" href="bootstrap.min.css">
-	<script src="jquery.min.js"></script>
-	<script src="bootstrap.min.js"></script>
-	</head>
-<body>
-<div class="container">
-	<form action="signup.php" method="post">
-	<p align="center">
-		<div class="row">
-			<div class="col-md-4" align="right">Membership Id : </div>
-			<div class="col-md-4"><input class="form-control" type="text" name="memID" placeholder="ex: 123" required oninvalid="this.setCustomValidity('Please Enter Membership ID')" oninput="setCustomValidity('')"></div>
-		</div>
-		<div class="row">
-			<div class="col-md-4" align="right">Password: </div>
-			<div class="col-md-4"><input class="form-control" type="password" name="password" placeholder="ex: ****" required oninvalid="this.setCustomValidity('Please Enter Password')" oninput="setCustomValidity('')"></div>
-		</div>
-		<div class="row">
-			<div class="col-md-4" align="right"></div>
-			<div class="col-md-4"><input class="form-control" type="submit" value="SIGNUP" name="signup" ></div>
-		</div>
-	</p>
-	</form>
-		<div class="row">
-			<div class="col-md-4" align="right"></div>
-			<div div class="col-md-4" align="center"><a href="login.php">Already Have an Account?</a></div>
-		</div>
-</div>
+<html>
+<head><title>
 <?php
-if(isset($_POST["signup_submit"])){
-	echo '<div class="container">
-						<div class="row">
-							<div class="col-md-4"></div>
-							<div class="col-md-4">
-								<div class="alert alert-info alert-dismissable">
-								<a href="login.php" class="close" data-dismiss="alert" arial-label="close">&times</a>
-								<strong>Your signup request is sent successfully!</strong></div><br>
-							</div>
-							<div class="col-md-4"></div>
-						</div>
-					</div>';
+session_start();
+if(!isset($_SESSION["memID"]) || !isset($_SESSION["password"])){
+	header ("location:login.php");
 }
+
+$memID=$_SESSION['memID'];
+$password=$_SESSION['password'];
+require 'connect.php';
+
+$details_query="SELECT * FROM member_details  WHERE MembershipID='$memID'";
+
+if($is_details_query_run=mysqli_query($connect,$details_query)){
+	$query_execute=mysqli_fetch_assoc($is_details_query_run);
+}
+echo "Hello ". $query_execute['Firstname'];
 ?>
+</title>
+<link href="bootstrap.min.css" rel="stylesheet"></head>
 
+<?php
+
+if(isset($_POST["update"])){
+	$update_firstname_query="UPDATE `member_details` SET `Firstname` = '".$_POST["firstname"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	$update_lastname_query="UPDATE `member_details` SET `Lastname` = '".$_POST["lastname"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	$update_address1_query="UPDATE `member_details` SET `Address1` = '".$_POST["address1"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	$update_address2_query="UPDATE `member_details` SET `Address2` = '".$_POST["address2"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	$update_mobile_query="UPDATE `member_details` SET `Mobile` = '".$_POST["mobile"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	$update_fixed_query="UPDATE `member_details` SET `Fixed` = '".$_POST["fixed"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	$update_email_query="UPDATE `member_details` SET `Email` = '".$_POST["email"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	$update_birthday_query="UPDATE `member_details` SET `Birthday` = '".$_POST["birthday"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	$update_nic_query="UPDATE `member_details` SET `NIC` = '".$_POST["nic"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	$update_occupation_query="UPDATE `member_details` SET `Occupation` = '".$_POST["occupation"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	
+	if(isset($_POST["firstname"])){$is_update_firstname_query_run=mysqli_query($connect,$update_firstname_query );}
+	if(isset($_POST["lastname"])){$is_update_lastname_query_run=mysqli_query($connect,$update_lastname_query );}
+	if(isset($_POST["address1"])){$is_update_address1_query_run=mysqli_query($connect,$update_address1_query );}
+	if(isset($_POST["address2"])){$is_update_address2_query_run=mysqli_query($connect,$update_address2_query );}
+	if(isset($_POST["mobile"])){$is_update_mobile_query_run=mysqli_query($connect,$update_mobile_query );}
+	if(isset($_POST["fixed"])){$is_update_fixed_query_run=mysqli_query($connect,$update_fixed_query );}
+	if(isset($_POST["email"])){$is_update_email_query_run=mysqli_query($connect,$update_email_query );}
+	if(isset($_POST["birthday"])){$is_update_birthday_query_run=mysqli_query($connect,$update_birthday_query );}
+	if(isset($_POST["nic"])){$is_update_nic_query_run=mysqli_query($connect,$update_nic_query );}
+	if(isset($_POST["occupation"])){$is_update_occupation_query_run=mysqli_query($connect,$update_occupation_query );}
+	header ("location:user.php");
+}
+function refresh($attribute){
+	if(isset($_POST["update"])){
+	echo $query_execute[$attribute];
+	}
+}
+
+?>
+<body>
+<div class='container'>
 <div class="container">
-<div class="row"> 
-<div class="col-md-4"></div>
-<div class="col-md-4">
-  <div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#myCarousel" data-slide-to="1"></li>
-      <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
-
-    <!-- Wrapper for slides -->
-    <div class="carousel-inner">
-      <div class="item active">
-        <img src="1.jpg" style="width:100%;">
-      </div>
-
-      <div class="item">
-        <img src="2.jpg" style="width:100%;">
-      </div>
-    
-      <div class="item">
-        <img src="3.jpg" style="width:100%;">
-      </div>
-    </div>
-
-    <!-- Left and right controls -->
-    <a class="left carousel-control" href="#myCarousel" data-slide="prev" width="300" height="300">
-      <span class=><<</span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" data-slide="next">
-      <span >>></span>
-      <span class="sr-only">Next</span>
-    </a>
-  </div>
+	<div class="row"><div class="col-md-10"></div><div class="col-md-2" style="background-color:#AFEEEE"><h2></h2>
+	<div class="container" align="center">
+	<ul class="nav nav-pills">
+		<li class="active"><a href="#"><?php echo $memID;?></a></li>
+		<li><a href="login.php">Logout</a></li>
+	</ul>
+	</div><h2></h2>
+	</div></div>
 </div>
+
+<h2></h2>
+
+<form action="user.php" method="post">
+<div class="container" align="center" style="background-color:#AFEEEE"><h2>Contact Details</h2>
+<p align="center">
+
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-2" align="left"><label>First Name </label></div>
+<div class="col-md-4"><input class="form-control" type="text" name="firstname" value="<?php 
+	echo $query_execute['Firstname'];
+	refresh('Firstname');
+	?>"></div>
+<div class="col-md-2"></div>
+<div class="col-md-2"><input class="form-control" type="submit" name="update" value="Update"></div>
 </div>
+
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-2" align="left"><label>Last Name </label></div>
+<div class="col-md-4"><input class="form-control" type="text" name="lastname" value="<?php  
+	echo $query_execute['Lastname'];
+	refresh('Lastname');
+	?>"></div>
+</div>
+
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-2" align="left"><label>Address1 </label></div>
+<div class="col-md-4"><input class="form-control" type="text" name="address1" value="<?php 
+		echo $query_execute['Address1'];
+		refresh('Address1');
+	?>"></div>
+</div>
+
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-2" align="left"><label>Address2 </label></div>
+<div class="col-md-4"><input class="form-control" type="text" name="address2" value="<?php 
+		echo $query_execute['Address2'];
+		refresh('Address2');
+	?>"></div>
+</div>
+
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-2" align="left"><label>Mobile No. </label></div>
+<div class="col-md-4"><input class="form-control" type="text" name="mobile" placeholder="07X-XXXXXXX" value="<?php 
+	echo $query_execute['Mobile'];
+	refresh('Mobile');
+	?>"></div>
+</div>
+
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-2" align="left"><label>Fixed Tel No. </label></div>
+<div class="col-md-4"><input class="form-control" type="text" name="fixed" placeholder="0XX-XXXXXXX" value="<?php 
+	echo $query_execute['Fixed'];
+	refresh('Fixed');
+	?>"></div>
+</div>
+
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-2" align="left"><label>e-mail </label></div>
+<div class="col-md-4"><input class="form-control" type="email" name="email" placeholder="example@email.com" value="<?php 
+	echo $query_execute['Email'];
+	refresh('Email');
+	?>"></div>
+</div>
+
+<div class="row"><h2></h2></div>
+
+</div>
+
+<h2></h2>
+
+<div class="container" align="center" style="background-color:#AFEEEE;"><h2>Personal Details</h2>
+<p align="center">
+
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-2" align="left"><label>Birthday</label></div>
+<div class="col-md-4"><input class="form-control" type="text" name="birthday" placeholder="YYYY-MM-DD" value="<?php 
+	echo $query_execute["Birthday"];
+	refresh('Birthday');
+	?>"></div>
+</div>
+
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-2" align="left"><label>National ID no.</label></div>
+<div class="col-md-4"><input class="form-control" type="text" name="nic" placeholder="XXXXXXXXXV" value="<?php 
+	echo $query_execute["NIC"];
+	refresh('NIC');
+	?>"></div>
+</div>
+
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-2" align="left"><label>Occupation</label></div>
+<div class="col-md-4"><input class="form-control" type="text" name="occupation" value="<?php 
+	echo $query_execute["Occupation"];
+	refresh('Occupation');
+	?>"></div>
+</div>
+
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-2" align="left"><label>Civil Status</label></div>
+<div class="col-md-2"><label>Single  </label><input type="radio" name="civil_status" value="Single"></div>
+<div class="col-md-2"><label>Married  </label><input type="radio" name="civil_status" value="Married"></div>
+</div>
+
+<div class="row"><h2></h2></div>
+
+</div>
+
+<h2></h2>
+
+<div class="container" align="center"style="background-color:#AFEEEE"><h2></h2>
+
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-2" align="left"><label>Admission no.</label></div>
+<div class="col-md-4"><input class="form-control" type="text" name="admission" value="<?php 
+	echo $query_execute["Admission"];
+	refresh('Admission');
+	?>"></div>
+</div>
+
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-2" align="left"><label>Period of Study</label></div>
+<div class="col-md-2"><label>From </label><input class="form-control" type="text" name="begin" placeholder="DD/MM/YY" value="<?php 
+	echo $query_execute["Begin"];
+	refresh('Begin');
+	?>"></div>
+<div class="col-md-2"><label>To </label><input class="form-control" type="text" name="end" placeholder="DD/MM/YY" value="<?php 
+	echo $query_execute["End"];
+	refresh('End');
+	?>"></div>
+</div>
+
+<h2></h2>
+
+</div>
+
+</form>
 </div>
 </body>
-</html>
+</html>                 

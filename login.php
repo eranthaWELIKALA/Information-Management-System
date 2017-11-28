@@ -1,12 +1,29 @@
-
-
+<?php
+session_start();session_destroy();
+?>
 
 <html>
 <head><title>LOGIN</title>
-<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<script src="bootstrap/js/bootstrap.min.js"></script>
+<link href="bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap.min.js"></script>
 </head>
 <body>
+<div class="container">
+	<div class="row"><div class="col-md-10"></div><div class="col-md-2">
+	<ul class="nav nav-pills">
+		<li><a href="home.php">Home</a></li>
+		<li class="active"><a>Login</a></li>
+	</ul>
+	</div></div>
+</div>
+<fieldset>
+<div class="container" align="center" >
+	<div style="width:196;height:196;border:2px solid #33b2ff;background-color:Gray;border-radius: 25px;">
+	<img src="login.png" class="img-circle" alt="Cinque Terre" width="176" height="176"> 
+	</div>
+</div>
+</fieldset>
+<br>
 <form action="login.php" method="post"><p align="center">
 <table>
 <tr>
@@ -42,7 +59,12 @@ if(isset($_POST["submit"])){
 				$_SESSION['memID']=$_POST["memID"];
 				$_SESSION['password']=$_POST["password"];
 				//$row =  mysqli_fetch_assoc($is_query_run);
-				header ("location:user.php");
+				if($_SESSION['memID']=="reg000"){
+					header ("location:reg.php");
+				}
+				else{
+					header ("location:user.php");
+				}
 			}
 			else{ echo '<div class="container">
 						<div class="row">
@@ -50,7 +72,7 @@ if(isset($_POST["submit"])){
 							<div class="col-md-4">
 								<div class="alert alert-danger alert-dismissable">
 								<a href="login.php" class="close" data-dismiss="alert" arial-label="close">&times</a>
-								<strong>Incorrect username</strong></div><br>
+								<strong>Incorrect username or password</strong></div><br>
 							</div>
 							<div class="col-md-4"></div>
 						</div>

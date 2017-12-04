@@ -9,6 +9,10 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<!-- Latest compiled and minified CSS -->
+			<!--Font Awesome CSS-->
+			<link rel="stylesheet" href="css/font-awesome.min.css">
 	
 	<!--<link rel="stylesheet" href="bootstrap.min.css">
 	<script src="jquery.min.js"></script>
@@ -17,12 +21,12 @@
 		body{
 			width:100%;
 			height:100%;
-			background-image:url('background1.jpg');
+			background-image:url('background-2.jpg');
 			background-size:cover;
 		}
 		
 		#one{
-			background-image:url('background2.jpg');
+			background-image:url('background-1.jpg');
 			background-repeat:no-repeat;
 			background-size: 720px 400px;
 			background-position: center;
@@ -43,9 +47,42 @@
 	
 	<!--logo of the school-->
 	<div class="container" align="center">
-		<img src="logo1.png" width="145" height="170">
+		<div class="row">
+			<div class="col-sm-4" align="right"><img src="Logo.png" style="width:30%"></div>
+			<div class="col-sm-4">
+				<h2 style = "color: black"><strong>Old Boys' Association<br> St. Anthony's College<br>Kandy</strong></h2>
+			</div>
+			<div class="col-sm-4"></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-4"></div>
+			<div class="col-sm-4"></div>
+			<div class="col-sm-4"></div>
+		</div>
+		<div class="row">
+			<ul class="list-inline">
+				<li style="list-style:none">
+					<a href="https://goo.gl/maps/9rgRRv8z7N92" style="color: blue">	
+							<i class="fa fa-map-marker"></i>								
+						St. Anthony's College, Kandy.
+					</a>
+				</li>
+				<li style="list-style:none color: black">
+					<div style="color: black">
+						<i class="fa fa-phone"></i>
+						+94 812213652
+					</div>
+				</li>
+				<li style="list-style:none color: black">
+					<div style="color: black">
+						<i class="fa fa-envelope-o"></i>
+						sacollegekdy@sltnet.lk
+					</div>
+				</li>
+			</ul>
+		</div>
 	</div>
-	
+	<hr>
 	<!--signup form area-->
 	<div class="container" id="one">
 		<form action="signup.php" method="post">
@@ -86,17 +123,17 @@
 			</ol>
 
 			<!-- Wrapper for slides -->
-			<div class="carousel-inner">
+			<div class="carousel-inner" style="max-height: 100%, max-width:50%">
 			  <div class="item active">
-				<img src="1.jpg" style="width:100%;">
+				<img src="College_Front.jpg" style="height:100%">
 			  </div>
 
 			  <div class="item">
-				<img src="2.jpg" style="width:100%;">
+				<img src="College_Bus.jpg" style="height:100%">
 			  </div>
 			
 			  <div class="item">
-				<img src="3.jpg" style="width:100%;">
+				<img src="Centenary_Hall.jpg" style="height:100%, width:100%">
 			  </div>
 			</div>
 
@@ -117,6 +154,5 @@
 </div>
 
 </div>
-
 </body>
 </html>

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php
  $mysql_host='localhost';
  $mysql_user='root';
@@ -9,5 +10,5 @@
 		echo "database connected<br>";
 	}else die('database not connected<br>');*/
  }else die("Connection Unsuccessful<br>");
- 
+ $conn = new PDO('mysql:host=localhost; dbname=members','root', ''); 
 ?>

@@ -1,19 +1,43 @@
+<!DOCTYPE html>
 <?php
 session_start();
-if(!isset($_SESSION["memID"]) || !isset($_SESSION["password"])){
+/*if(!isset($_SESSION["memID"]) || !isset($_SESSION["password"])){
 	header ("location:login.php");
-}
+}*/
 ?>
 <html>
 <head>
 <!--setting the title-->
 <title>Requests</title>
 <!--adding bootstrap-->
-<link href="bootstrap.min.css" rel="stylesheet">
-<script src="bootstrap.min.js"></script>
-
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+body{
+	width:100%;
+	height:100%;
+	background-image:url('background.jpg');
+	background-size:cover;
+}
+#one{
+			width:100%;
+			height:100%;
+			background-color:#000;
+			background-size:cover;
+		}
+</style>
 </head>
 <body>
+
+<div class="container" id="one"><h2></h2>
+	<div class="col-md-10"></div><div class="col-md-2">
+	<ul class="nav nav-pills">
+		<li class="active"><a href="#"><?php echo "Registrar";?></a></li>
+		<li><a href="login.php"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
+	</ul><h2></h2></div>
+</div>
+
 <div class='container'>
 
 <?php
@@ -24,7 +48,7 @@ $requests_query="SELECT COUNT(*) FROM signup_requests";
 if($is_requests_query_run=mysqli_query($connect,$requests_query)){
 	while($query_execute=mysqli_fetch_assoc($is_requests_query_run)){
 		if($query_execute['COUNT(*)']==0){
-			echo "<div class='row'><div class='col-md-4'></div><div class='col-md-4'>"."<p align='center'>No new requests</p>"."</div></div>";
+			echo "<div class='row'><div class='col-md-4'></div><div class='col-md-4'>"."<p align='center'><label>No new requests</label></p>"."</div></div>";
 		}
 	}
 }
@@ -35,17 +59,26 @@ if($is_requests_query_run=mysqli_query($connect,$requests_query)){
 	$itr1=0;
 	$value=1;
 	$memIDArray=array();
+	echo "<div class='container'><table class='table table-striped'><thead><tr><th>MembershipID</th><th>Firstname</th><th>Lastname</th><th></th></tr></thead><tbody>";
 	while($query_execute=mysqli_fetch_assoc($is_requests_query_run)){
 		$memIDArray[$itr1]=$query_execute['MembershipID'];
 		$firstnameArray[$itr1]=$query_execute['Firstname'];
 		$lastnameArray[$itr1]=$query_execute['Lastname'];
 		$passwordArray[$itr1]=$query_execute['Password'];
 		$acceptedArray[$itr1]=$query_execute['Accepted'];
-		echo "<div class='row'><div class='col-md-2' style='align:center'>".$query_execute['MembershipID']."</div><div class='col-md-3' style='align:center'>".$query_execute['Firstname']."</div><div class='col-md-3' style='align:center'>".$query_execute['Lastname']."</div>";
+		echo "<tr>";
+		echo "<td>".$query_execute['MembershipID']."</td>";
+		echo "<td>".$query_execute['Firstname']."</td>";
+		echo "<td>".$query_execute['Lastname']."</td>";
+		echo "<td><form method='post' action='requests.php'><input class='form-control' type='submit' name='".$memIDArray[$itr1]."' value='ACCEPT'></td>";
+		echo "<td><input class='form-control' type='submit' name='".$memIDArray[$itr1]."undo"."' value='UNDO'></form></td>";
+		/*echo "<div class='row'><div class='col-md-2' style='align:center'>".$query_execute['MembershipID']."</div><div class='col-md-3' style='align:center'>".$query_execute['Firstname']."</div><div class='col-md-3' style='align:center'>".$query_execute['Lastname']."</div>";
 		echo "<div class='col-md-2'><form method='post' action='requests.php'><input class='form-control' type='submit' name='".$memIDArray[$itr1]."' value='ACCEPT'></div>";
-		echo "<div class='col-md-2'><input class='form-control' type='submit' name='".$memIDArray[$itr1]."undo"."' value='UNDO'></div></div></form>";
+		echo "<div class='col-md-2'><input class='form-control' type='submit' name='".$memIDArray[$itr1]."undo"."' value='UNDO'></div></div></form>";*/
 		$itr1++;
+		echo "</tr>";
 	}
+	echo "</table></div>";
 }
 
 for($itr2=0;$itr2<$itr1;$itr2++){
@@ -67,7 +100,7 @@ for($itr3=0;$itr3<$itr1;$itr3++){
 	if(isset($_POST[$undo])){
 		$is_undo_query_run=mysqli_query($connect,$undo_query);
 		if($is_undo_query_run){
-			//echo "jump";
+			echo "jump";
 		}
 		
 	}
@@ -106,7 +139,7 @@ if(isset($_POST["deleteall"])){
 	if($is_delete_query_run){
 		header ('location:reg.php');
 	}
-}
+} 
 ?>
 <form action='requests.php' method='post'>
 <div class='row'><div class='col-md-4'></div><div class='col-md-4'><input class="form-control" type="submit" name="done" value="DONE"></div></div>

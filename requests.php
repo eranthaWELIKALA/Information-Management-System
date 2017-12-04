@@ -17,25 +17,40 @@ session_start();
 body{
 	width:100%;
 	height:100%;
-	background-image:url('background.jpg');
+	background-image:url('background-10.jpg');
 	background-size:cover;
+	padding: 15px;
 }
 #one{
 			width:100%;
 			height:100%;
-			background-color:#000;
+			background-image: url('background-11.jpg');
 			background-size:cover;
+			background-position: center;
 		}
 </style>
 </head>
 <body>
-
-<div class="container" id="one"><h2></h2>
-	<div class="col-md-10"></div><div class="col-md-2">
-	<ul class="nav nav-pills">
-		<li class="active"><a href="#"><?php echo "Registrar";?></a></li>
-		<li><a href="login.php"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
-	</ul><h2></h2></div>
+<div class="wrapper">
+	<div class="row" align="center">
+		<div class="col-sm-4"></div>
+		<div class="col-sm-4"><h2>Sign Up Requests</h2></div>
+		<div class="col-sm-4"></div>
+		
+	</div>
+	<div class="container"  id="one">
+		<div class="row">
+			<div class="col-sm-10"></div>
+			<div class="col-sm-2">
+				<br>
+				<ul class="nav nav-pills">
+					<li class="active"><a href="#"><?php echo "Registrar";?></a></li>
+					<li><a href="login.php"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
+				</ul>
+				<br>
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class='container'>
@@ -59,7 +74,7 @@ if($is_requests_query_run=mysqli_query($connect,$requests_query)){
 	$itr1=0;
 	$value=1;
 	$memIDArray=array();
-	echo "<div class='container'><table class='table table-striped'><thead><tr><th>MembershipID</th><th>Firstname</th><th>Lastname</th><th></th></tr></thead><tbody>";
+	echo "<div class='container'><table class='table table-striped'><thead><tr><th>Membership ID</th><th>First Name</th><th>Last Name</th><th></th></tr></thead><tbody>";
 	while($query_execute=mysqli_fetch_assoc($is_requests_query_run)){
 		$memIDArray[$itr1]=$query_execute['MembershipID'];
 		$firstnameArray[$itr1]=$query_execute['Firstname'];

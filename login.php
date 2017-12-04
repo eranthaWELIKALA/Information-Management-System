@@ -44,9 +44,9 @@ session_start();session_destroy();
 <div class="container" id="one">
 	<br>
 	<div class="row">
-		<div class="col-md-2"></div>
-		<div class="col-md-8" align="center"><h2><font color="#FF2400">Old Boy Association - Login</font></h2></div>
-		<div class="col-md-2">
+		<div class="col-sm-2"></div>
+		<div class="col-sm-8" align="center"><h2><font color="#FF2400">Old Boy Association - Login</font></h2></div>
+		<div class="col-sm-2">
 			<ul class="nav nav-pills">
 				<li><a href="home.php"><span class="glyphicon glyphicon-home" style="color:#810541"></span><font color="#810541"> Home</font></a></li>
 				<li class="active"><a><span class="glyphicon glyphicon-user"></span> Login</a></li>

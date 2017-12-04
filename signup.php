@@ -14,35 +14,41 @@
 		body{
 			width:100%;
 			height:100%;
-			background-image:url('background1.jpg');
+			background-image:url('background-2.jpg');
 			background-size:cover;
 			padding: 15px;
 		}
 		#one{
 			width:100%;
 			height:100%;
-			background-image:url('navbar.jpg');
+			background-image:url('background-6.jpg');
+			background-position: center;
 			background-size:cover;
 		}
 		#two{
-			background-image:url('background2.jpg');
+			background-image:url('background-9.jpg');
 			background-repeat:no-repeat;
-			background-size: 800px 400px;
+			background-size: 900px 400px;
 			background-position: center;
 			padding: 35px;
 			border-radius: 50px;
 		}
 		.nav-pills > li.active > a, .nav-pills > li.active > a:focus {
-			color: black;
-			background-color: #fcd900;
+			color: white;
+			background-color: #800000;
+		}
+
+		.nav-pills > li.inactive{
+			background-color: #ADD8E6;
+			border-radius:5px;
 		}
 
         .nav-pills > li.active > a:hover {
-            background-color: #000000;
+            background-color: #800000;
             color:white;
         }
 		.form-control.submit{
-			background-color: #000000;
+			background-color: #800000;
 		}
 	</style>
 </head>
@@ -55,7 +61,7 @@
 		<div class="col-md-10"></div>
 		<div class="col-md-2">
 			<ul class="nav nav-pills red">
-				<li><a href="home.php"><font color="#FFDF00">Home</font></a></li>
+				<li class="inactive"><a href="home.php"><font color=black>Home</font></a></li>
 				<li class="active"><a>Signup</a></li>
 			</ul>
 		</div>

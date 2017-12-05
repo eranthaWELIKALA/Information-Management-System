@@ -59,6 +59,9 @@ function refresh($attribute){
   <title><?php echo $_SESSION['searched_memID']; ?></title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bootstrap.min.css">
+	<script src="jquery.min.js"></script>
+	<script src="bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -88,7 +91,7 @@ function refresh($attribute){
         <ul class="nav navbar-nav">
           <li><a href="#details1">Contact Details</a></li>
           <li><a href="#details2">Personal Details</a></li>
-          <li><a href="#details3">Other</a></li>
+		  <li><a href="#details3">Contributions</a></li>
 		  <li><a href="reg.php"><span class="glyphicon glyphicon-chevron-left"></span> Back</a></li>
         </ul>
       </div>
@@ -132,7 +135,7 @@ function refresh($attribute){
 <div id="details2" class="container-fluid"><br><br>
   <h1>Personal Details</h1><br><br>
   <div class='container'><table class='table table-bordered table-striped'><tbody>
-  <tr><td>Birthday</td><td><input class="form-control" type="text" name="birthday" placeholder="YYYY-MM-DD" value="<?php 
+  <tr><td>Birthday</td><td><input class="form-control" type="date" name="birthday" placeholder="YYYY-MM-DD" value="<?php 
 																																echo $query_execute["Birthday"];
 																																refresh('Birthday');
 																															?>"></td></tr>
@@ -157,24 +160,74 @@ function refresh($attribute){
 					<div class='col-md-2'><label>Married  </label><input type='radio' name='civil_status' value='Married'></div>";
 			}
 			?></td></tr>
-  </tbody></table></div>
-</div>
-<div id="details3" class="container-fluid"><br><br>
-  <h1>Other</h1><br><br>
-  <div class='container'><table class='table table-bordered table-striped'><tbody>
+  </tbody></table>
+  <table class='table table-bordered table-striped'><tbody>
   <tr><td>Admission no.</td><td><input class="form-control" type="text" name="admission" value="<?php 
 																										echo $query_execute["Admission"];
 																										refresh('Admission');
 																									?>"></td><td></td></tr>
-  <tr><td>Period of Study</td><td>from: <input class="form-control" type="text" name="begin" placeholder="YYYY-MM-DD" value="<?php 
+  <tr><td>Period of Study</td><td>from: <input class="form-control" type="date" name="begin" placeholder="YYYY-MM-DD" value="<?php 
 																																			echo $query_execute["Begin"];
 																																			refresh('Begin');
-																																		?>"></td><td>to: <input class="form-control" type="text" name="end" placeholder="YYYY-MM-DD" value="<?php 
+																																		?>"></td><td>to: <input class="form-control" type="date" name="end" placeholder="YYYY-MM-DD" value="<?php 
 																																		echo $query_execute["End"];
 																																		refresh('End');
 																																		?>"></td></tr>
-  </tbody></table></div>
+  </tbody></table></form>
+  </div>
 </div>
-</form>
+<div id="details3" class="container-fluid"><br><br>
+  <h1>Contributions</h1><br><br>
+  <div class='container'>
+	<div class='row'>
+		<form action='reg_advanced_search.php' method='post'>
+		<div class='col-md-4'>
+		<input class='form-control' type='text' name='add' placeholder='This is a new contribution.'>
+		</div>
+		<div class='col-md-2'>
+		<input class='form-control' type='submit' name='add_con' value='Add new a contribution' >
+		</div>
+		</form>
+	</div>
+  </div><br><br>
+  <?php
+function show_query(){
+	require 'connect.php';
+	$show_contribution_query="SELECT * FROM `members_contributions` WHERE MembershipID='".$_SESSION['searched_memID']."'";
+	$is_show_contribution_query_run=mysqli_query($connect,$show_contribution_query);
+	$show_contribution_query_execute=mysqli_fetch_assoc($is_show_contribution_query_run);
+	return $show_contribution_query_execute['Contributions'];
+}
+function update_query(){
+	require 'connect.php';
+	$update_contribution_query="UPDATE `members_contributions` SET `Contributions` = '".show_query()." ".$_POST['add'].".' WHERE `members_contributions`.`MembershipID` = '".$_SESSION['searched_memID']."'" ;
+	$is_update_contribution_query_run=mysqli_query($connect,$update_contribution_query);
+}
+if(isset($_SESSION['searched_memID'])){
+	if(isset($_POST['add_con'])){
+		if(isset($_POST['add'])){
+			update_query();
+		}
+		
+		else{ 
+			echo '<div class="container">
+					<div class="row">
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<div class="alert alert-warning alert-dismissable">
+							<a href="reg.php" class="close" data-dismiss="alert" arial-label="close">&times</a>
+							<strong>There is no new contribution</strong>
+							</div><br>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>';
+		}
+	}
+	 echo "<div class='container'><div class='row'><div class='col-md-9'><textarea class='form-control' rows='6' cols='25' readonly>". show_query()."</textarea></div></div></div>";
+}
+?>
+</div>
+
 </body>
 </html>

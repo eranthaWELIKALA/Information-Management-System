@@ -1,5 +1,5 @@
 <?php
-		session_start();include('header.php');
+		session_start();
 		if(!isset($_SESSION["memID"]) || !isset($_SESSION["password"])){
 			header ("location:login.php");
 		}
@@ -23,7 +23,10 @@
 		echo "Hello ". $query_execute['Firstname'];
 	?>
 </title>
-
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="bootstrap.min.css">
+	<script src="jquery.min.js"></script>
+	<script src="bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -73,7 +76,6 @@ if(isset($_POST["update"])){
 	$update_addmission_query="UPDATE `member_details` SET `Admission` = '".$_POST["admission"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
 	$update_begin_query="UPDATE `member_details` SET `Begin` = '".$_POST["begin"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
 	$update_end_query="UPDATE `member_details` SET `End` = '".$_POST["end"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_image_query="UPDATE `member_details` SET `Image` = '".$_POST["image"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
 	
 	if(isset($_POST["firstname"])){$is_update_firstname_query_run=mysqli_query($connect,$update_firstname_query );}
 	if(isset($_POST["lastname"])){$is_update_lastname_query_run=mysqli_query($connect,$update_lastname_query );}
@@ -89,7 +91,6 @@ if(isset($_POST["update"])){
 	if(isset($_POST["admission"])){$update_addmission_query_run=mysqli_query($connect,$update_addmission_query );}
 	if(isset($_POST["begin"])){$update_begin_query_run=mysqli_query($connect,$update_begin_query );}
 	if(isset($_POST["end"])){$update_end_query_run=mysqli_query($connect,$update_end_query );}
-	if(isset($_POST["image"])){$update_image_query_run=mysqli_query($connect,$update_image_query );}
 	header ("location:user.php");
 }
 
@@ -106,7 +107,11 @@ function refresh($attribute){
 <br>
 
 <div class="container" id="one">
-	<div class="row"><div class="col-md-10"></div><div class="col-md-2"><h2></h2>
+	<div class="row">
+	<div class="col-md-1">	</div>
+	<div class="col-md-2"><br><button type="button" class="btn btn-default" onclick="location.href='change_password.php';">Change Password</button></div>
+	<div class="col-md-7">	</div>
+	<div class="col-md-2"><h2></h2>
 	<div class="container" align="center">
 	<ul class="nav nav-pills">
 		<li class="active"><a href="#"><?php echo $memID;?></a></li>
@@ -204,7 +209,7 @@ function refresh($attribute){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>Birthday</label></div>
-			<div class="col-md-4"><input class="form-control" type="text" name="birthday" placeholder="YYYY-MM-DD" value="<?php 
+			<div class="col-md-4"><input class="form-control" type="date" name="birthday" placeholder="YYYY-MM-DD" value="<?php 
 																																echo $query_execute["Birthday"];
 																																refresh('Birthday');
 																															?>">
@@ -267,12 +272,12 @@ function refresh($attribute){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>Period of Study</label></div>
-			<div class="col-md-2"><label>From </label><input class="form-control" type="text" name="begin" placeholder="YYYY-MM-DD" value="<?php 
+			<div class="col-md-2"><label>From </label><input class="form-control" type="date" name="begin" placeholder="YYYY-MM-DD" value="<?php 
 																																			echo $query_execute["Begin"];
 																																			refresh('Begin');
 																																		?>">
 			</div>
-			<div class="col-md-2"><label>To </label><input class="form-control" type="text" name="end" placeholder="YYYY-MM-DD" value="<?php 
+			<div class="col-md-2"><label>To </label><input class="form-control" type="date" name="end" placeholder="YYYY-MM-DD" value="<?php 
 																																		echo $query_execute["End"];
 																																		refresh('End');
 																																		?>">
@@ -280,6 +285,5 @@ function refresh($attribute){
 		</div><h2></h2>
 	</div>
 </form>
-
 </body>
 </html>                 

@@ -50,7 +50,7 @@ if($is_requests_query_run=mysqli_query($connect,$requests_query)){
 		$lastnameArray[$itr1]=$query_execute['Lastname'];
 		$passwordArray[$itr1]=$query_execute['Password'];
 		$acceptedArray[$itr1]=$query_execute['Accepted'];
-		echo "<div class='row'><div class='col-md-2' style='align:center'>".$query_execute['MembershipID']."</div><div class='col-md-3' style='align:center'>".$query_execute['Firstname']."</div><div class='col-md-3' style='align:center'>".$query_execute['Lastname']."</div>";
+		echo "<div class='row'><div class='col-md-2' style='align:center'>".$query_execute['MembershipID']."</div><div class='col-md-3' style='align:center'>".$query_execute['Firstname']."</div><div class='col-md-3' style='align:center'>".$query_execute['Lastname']."<input type='checkbox' name='accepted_tick' readonly></div>";
 		echo "<div class='col-md-2'><form method='post' action='requests.php'><input class='form-control' type='submit' name='".$memIDArray[$itr1]."' value='ACCEPT'></div>";
 		echo "<div class='col-md-2'><input class='form-control' type='submit' name='".$memIDArray[$itr1]."undo"."' value='UNDO'></div></div></form>";
 		$itr1++;

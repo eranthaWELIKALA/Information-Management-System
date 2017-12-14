@@ -1,30 +1,34 @@
 <?php
 session_start();
-require 'connect.php';
-		if(!isset($_SESSION["memID"]) || !isset($_SESSION["password"])){
-			header ("location:login.php");
-		}
 
-		$memID=$_SESSION['memID'];
-		$password=$_SESSION['password'];
+//importing pages
+require 'connect.php';require 'function.php';
+
+//access controlling
+if(!isset($_SESSION["memID"]) || !isset($_SESSION["password"])){
+	header ("location:login.php");
+}
+
+//assigning variables
+$memID=$_SESSION['memID'];
+$password=$_SESSION['password'];
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Change Password</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="bootstrap.min.css">
-	<script src="jquery.min.js"></script>
-	<script src="bootstrap.min.js"></script>
+
+	<!-- importing bootstrap -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	
+
+	<!-- adding styles -->
 	<style>
 		body{
 			width:100%;
 			height:100%;
-			background-image:url('userbackground.jpg');
 			background-size:cover;
 			padding:15px;
 		}
@@ -34,7 +38,7 @@ require 'connect.php';
 			background-image:url('navbar.jpg');
 			background-size:cover;
 		}
-				
+
 		.nav-pills > li.active > a, .nav-pills > li.active > a:focus {
 			color: black;
 			background-color: #fcd900;
@@ -48,6 +52,7 @@ require 'connect.php';
 </head>
 
 <body>
+<button type="button" class="btn btn-default" onclick='location.href="<?php if($memID=="reg000"){echo "reg.php";}else if($memID=="sec000"){echo "sec.php";}else{echo "user.php";}?>";'><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
 <form action="change_password.php" method="post">
 	<div class="container"><br><br><h1 align='center'>Change Password</h1><br><br>
 		<div class="row" align="right">
@@ -71,38 +76,23 @@ require 'connect.php';
 
 </body>
 <?php
+		//displaying alerts & updating passwords
 		if(isset($_POST['change'])){
 			if($_POST['old_password']!=$password){
-				echo '<div class="container" align="center">
-									<div class="row">
-										<div class="col-md-3"></div>
-										<div class="col-md-6">
-											<div class="alert alert-info alert-dismissable">
-											<a href="change_password.php" class="close" data-dismiss="alert" arial-label="close">&times</a>
-											<strong>Old password is not correct</strong></div><br>
-										</div>
-										<div class="col-md-3"></div>
-									</div>
-								</div>';
+				dislplay_alerts("info","change_password.php","Old password is not correct");
 			}else{
 				if($_POST['new_password']!=$_POST['rnew_password']){
-					echo '<div class="container" align="center">
-									<div class="row">
-										<div class="col-md-3"></div>
-										<div class="col-md-6">
-											<div class="alert alert-info alert-dismissable">
-											<a href="change_password.php" class="close" data-dismiss="alert" arial-label="close">&times</a>
-											<strong>New password are not matching</strong></div><br>
-										</div>
-										<div class="col-md-3"></div>
-									</div>
-								</div>';
+					dislplay_alerts("info","change_password.php","New password are not matching");
 				}
 				else{
+					//updating passwords
 					$update_password_query="UPDATE `members_login_details` SET `Password` = '".$_POST['new_password']."' WHERE `members_login_details`.`MembershipID` = '".$memID."'";
 					$is_update_firstname_query_run=mysqli_query($connect,$update_password_query );
 					$_SESSION['password']=$_POST['new_password'];
-					header ('location:user.php');
+					if($memID=="reg000"){header ('location:reg.php');}
+					else if($memID=="sec000"){header ('location:sec.php');}
+					else if($memID=="admin000"){header ('location:admin.php');}
+					else{header ('location:user.php');}
 				}
 			}
 		}

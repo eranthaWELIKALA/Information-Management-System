@@ -1,20 +1,31 @@
 <?php
 		session_start();
+
+		//access controlling
 		if(!isset($_SESSION["memID"]) || !isset($_SESSION["password"])){
 			header ("location:login.php");
 		}
+		if($_SESSION("memID")=="sec000" || $_SESSION("memID")=="reg000" || $_SESSION("memID")=="admin000"){
+			header ("location:login.php");
+		}
 
+		//setting variables
 		$memID=$_SESSION['memID'];
 		$password=$_SESSION['password'];
-		
-		require 'connect.php';
+
+		//importing pages
+		require 'connect.php';require 'function.php';
 
 		$details_query="SELECT * FROM member_details  WHERE MembershipID='$memID'";
-
+		$contribution_details_query="SELECT * FROM `members_contributions` WHERE MembershipID='$memID'";
 		if($is_details_query_run=mysqli_query($connect,$details_query)){
 			$query_execute=mysqli_fetch_assoc($is_details_query_run);
 		}
+		if($is_contribution_details_query_run=mysqli_query($connect,$contribution_details_query)){
+			$contribution_query_execute=mysqli_fetch_assoc($is_contribution_details_query_run);
+		}
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,29 +34,24 @@
 		echo "Hello ". $query_execute['Firstname'];
 	?>
 </title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="bootstrap.min.css">
-	<script src="jquery.min.js"></script>
-	<script src="bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	
+
 	<style>
 		body{
 			width:100%;
 			height:100%;
-			background-image:url('userbackground.jpg');
 			background-size:cover;
 			padding:15px;
 		}
 		#one{
 			width:100%;
 			height:100%;
-			background-image:url('navbar.jpg');
+			background-image:url('background-1.jpg');
 			background-size:cover;
 		}
-				
+
 		.nav-pills > li.active > a, .nav-pills > li.active > a:focus {
 			color: black;
 			background-color: #fcd900;
@@ -73,10 +79,9 @@ if(isset($_POST["update"])){
 	$update_nic_query="UPDATE `member_details` SET `NIC` = '".$_POST["nic"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
 	$update_occupation_query="UPDATE `member_details` SET `Occupation` = '".$_POST["occupation"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
 	$update_civil_status_query="UPDATE `member_details` SET `Civil_status` = '".$_POST["civil_status"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_addmission_query="UPDATE `member_details` SET `Admission` = '".$_POST["admission"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
 	$update_begin_query="UPDATE `member_details` SET `Begin` = '".$_POST["begin"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
 	$update_end_query="UPDATE `member_details` SET `End` = '".$_POST["end"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	
+
 	if(isset($_POST["firstname"])){$is_update_firstname_query_run=mysqli_query($connect,$update_firstname_query );}
 	if(isset($_POST["lastname"])){$is_update_lastname_query_run=mysqli_query($connect,$update_lastname_query );}
 	if(isset($_POST["address1"])){$is_update_address1_query_run=mysqli_query($connect,$update_address1_query );}
@@ -88,17 +93,12 @@ if(isset($_POST["update"])){
 	if(isset($_POST["nic"])){$is_update_nic_query_run=mysqli_query($connect,$update_nic_query );}
 	if(isset($_POST["occupation"])){$is_update_occupation_query_run=mysqli_query($connect,$update_occupation_query );}
 	if(isset($_POST["civil_status"])){$is_update_civil_status_query_run=mysqli_query($connect,$update_civil_status_query );}
-	if(isset($_POST["admission"])){$update_addmission_query_run=mysqli_query($connect,$update_addmission_query );}
 	if(isset($_POST["begin"])){$update_begin_query_run=mysqli_query($connect,$update_begin_query );}
 	if(isset($_POST["end"])){$update_end_query_run=mysqli_query($connect,$update_end_query );}
 	header ("location:user.php");
 }
 
-function refresh($attribute){
-	if(isset($_POST["update"])){
-		echo $query_execute[$attribute];
-	}
-}
+
 
 ?>
 
@@ -109,7 +109,7 @@ function refresh($attribute){
 <div class="container" id="one">
 	<div class="row">
 	<div class="col-md-1">	</div>
-	<div class="col-md-2"><br><button type="button" class="btn btn-default" onclick="location.href='change_password.php';">Change Password</button></div>
+	<div class="col-md-2"><br><button type="button" class="btn btn-default" style="background-color:#ffd900" onclick="location.href='change_password.php';">Change Password</button></div>
 	<div class="col-md-7">	</div>
 	<div class="col-md-2"><h2></h2>
 	<div class="container" align="center">
@@ -129,9 +129,17 @@ function refresh($attribute){
 		<div class="container-fluid" style="background-color:#00EEEE"><h2>Contact Details</h2></div><h2></h2>
 
 		<div class="row">
+			<div class="col-md-8"></div>
+			<div class="col-md-2">
+					<button type="button" class="btn btn-default" onclick='location.href="uploadPic.php"'>Upload a New Picture</button>
+			 </div>
+			<div class="col-md-2"> <?php if($query_execute['Pic']!=NULL){echo "<img src = '".$query_execute['Pic']."' style = 'height:150px;width:150px'>";}else{echo "<img src = 'pics/default.png' style = 'height:150px;width:150px'>";} ?> </div>
+		</div>
+<br>
+		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>First Name </label></div>
-			<div class="col-md-4"><input class="form-control" type="text" name="firstname" value="<?php 
+			<div class="col-md-4"><input class="form-control" type="text" name="firstname" value="<?php
 																										echo $query_execute['Firstname'];
 																										refresh('Firstname');
 																									?>">
@@ -143,7 +151,7 @@ function refresh($attribute){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>Last Name </label></div>
-			<div class="col-md-4"><input class="form-control" type="text" name="lastname" value="<?php  
+			<div class="col-md-4"><input class="form-control" type="text" name="lastname" value="<?php
 																									echo $query_execute['Lastname'];
 																									refresh('Lastname');
 																								?>">
@@ -153,7 +161,7 @@ function refresh($attribute){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>Address1 </label></div>
-			<div class="col-md-4"><input class="form-control" type="text" name="address1" value="<?php 
+			<div class="col-md-4"><input class="form-control" type="text" name="address1" value="<?php
 																									echo $query_execute['Address1'];
 																									refresh('Address1');
 																								?>">
@@ -163,7 +171,7 @@ function refresh($attribute){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>Address2 </label></div>
-			<div class="col-md-4"><input class="form-control" type="text" name="address2" value="<?php 
+			<div class="col-md-4"><input class="form-control" type="text" name="address2" value="<?php
 																									echo $query_execute['Address2'];
 																									refresh('Address2');
 																								?>">
@@ -173,7 +181,7 @@ function refresh($attribute){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>Mobile No. </label></div>
-			<div class="col-md-4"><input class="form-control" type="text" name="mobile" placeholder="07X-XXXXXXX" value="<?php 
+			<div class="col-md-4"><input class="form-control" type="text" name="mobile" placeholder="07X-XXXXXXX" value="<?php
 																															echo $query_execute['Mobile'];
 																															refresh('Mobile');
 																														?>">
@@ -183,7 +191,7 @@ function refresh($attribute){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>Fixed Tel No. </label></div>
-			<div class="col-md-4"><input class="form-control" type="text" name="fixed" placeholder="0XX-XXXXXXX" value="<?php 
+			<div class="col-md-4"><input class="form-control" type="text" name="fixed" placeholder="0XX-XXXXXXX" value="<?php
 																															echo $query_execute['Fixed'];
 																															refresh('Fixed');
 																														?>">
@@ -193,7 +201,7 @@ function refresh($attribute){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>e-mail </label></div>
-			<div class="col-md-4"><input class="form-control" type="email" name="email" placeholder="example@email.com" value="<?php 
+			<div class="col-md-4"><input class="form-control" type="email" name="email" placeholder="example@email.com" value="<?php
 																																	echo $query_execute['Email'];
 																																	refresh('Email');
 																																?>">
@@ -209,7 +217,7 @@ function refresh($attribute){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>Birthday</label></div>
-			<div class="col-md-4"><input class="form-control" type="date" name="birthday" placeholder="YYYY-MM-DD" value="<?php 
+			<div class="col-md-4"><input class="form-control" type="date" name="birthday" placeholder="YYYY-MM-DD" value="<?php
 																																echo $query_execute["Birthday"];
 																																refresh('Birthday');
 																															?>">
@@ -219,7 +227,7 @@ function refresh($attribute){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>National ID no.</label></div>
-			<div class="col-md-4"><input class="form-control" type="text" name="nic" placeholder="XXXXXXXXXV" value="<?php 
+			<div class="col-md-4"><input class="form-control" type="text" name="nic" placeholder="XXXXXXXXXV" value="<?php
 																															echo $query_execute["NIC"];
 																															refresh('NIC');
 																														?>">
@@ -229,7 +237,7 @@ function refresh($attribute){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>Occupation</label></div>
-			<div class="col-md-4"><input class="form-control" type="text" name="occupation" value="<?php 
+			<div class="col-md-4"><input class="form-control" type="text" name="occupation" value="<?php
 																										echo $query_execute["Occupation"];
 																										refresh('Occupation');
 																									?>">
@@ -262,28 +270,33 @@ function refresh($attribute){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>Admission no.</label></div>
-			<div class="col-md-4"><input class="form-control" type="text" name="admission" value="<?php 
+			<div class="col-md-4"><input class="form-control" type="text" name="admission" value="<?php
 																										echo $query_execute["Admission"];
-																										refresh('Admission');
-																									?>">
+																									?>" readonly>
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>Period of Study</label></div>
-			<div class="col-md-2"><label>From </label><input class="form-control" type="date" name="begin" placeholder="YYYY-MM-DD" value="<?php 
+			<div class="col-md-2"><label>From </label><input class="form-control" type="date" name="begin" placeholder="YYYY-MM-DD" value="<?php
 																																			echo $query_execute["Begin"];
 																																			refresh('Begin');
 																																		?>">
 			</div>
-			<div class="col-md-2"><label>To </label><input class="form-control" type="date" name="end" placeholder="YYYY-MM-DD" value="<?php 
+			<div class="col-md-2"><label>To </label><input class="form-control" type="date" name="end" placeholder="YYYY-MM-DD" value="<?php
 																																		echo $query_execute["End"];
 																																		refresh('End');
 																																		?>">
 			</div>
 		</div><h2></h2>
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-2" align="left"><label>Contribution</label></div>
+			<div class="col-md-4"><textarea class='form-control' rows='6' cols='25' readonly><?php	echo $contribution_query_execute['Contributions'];?></textarea>
+			</div>
+		</div><br>
 	</div>
 </form>
 </body>
-</html>                 
+</html>

@@ -12,12 +12,11 @@ session_start();session_destroy();
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	
+
 	<style>
 		body{
 			width:100%;
 			height:100%;
-			background-image:url('background-3.jpg');
 			background-size:cover;
 			padding: 15px;
 		}
@@ -69,7 +68,7 @@ session_start();session_destroy();
 	<fieldset>
 	<div class="container" align="center" >
 		<div>
-		<img src="login-3.png" class="img-circle" alt="Cinque Terre" width="176" height="176"> 
+		<img src="login-3.png" class="img-circle" alt="Cinque Terre" width="176" height="176">
 		</div>
 	</div>
 	</fieldset>
@@ -80,12 +79,13 @@ session_start();session_destroy();
 	<form action="login.php" method="post">
 		<div class="row">
 			<div class="col-md-4" align="right"><label><font color="#ff0000">Membership ID : </font></label></div>
-			<div class="col-md-4"><input class="form-control" type="text" name="memID" placeholder="ex: 123" required></div><div class='col-md-1'><a href="temp_login.php" class="btn btn-info btn-lg" >
+			<div class="col-md-4"><input class="form-control" type="text" name="memID" placeholder="ex: 123" required></div><div class='col-md-1'><a href="temp_login.php" class="btn btn-info btn-lg" title="No Membership ID ? Try this out">
           <span class="glyphicon glyphicon-question-sign"></span></a></div>
 		</div>
 		<div class="row" align="center">
 			<div class="col-md-4" align="right"><label><font color="#ff0000">Password : </font></label></div>
-			<div class="col-md-4"><input class="form-control" type="password" name="password" placeholder="ex: ****" required></div>
+			<div class="col-md-4"><input class="form-control" type="password" name="password" id="password" placeholder="ex: ****" required></div>
+			<div class="col-md-1" align="left"><a class="btn" onclick="myFunction()"><span class="glyphicon glyphicon-eye-open"></span></a></div>
 		</div><h6></h6>
 		<div class="row">
 			<div class="col-md-4"></div>
@@ -93,7 +93,16 @@ session_start();session_destroy();
 		</div>
 	</form>
 </div>
-
+<script type="text/javascript">
+function myFunction() {
+		var x = document.getElementById("password");
+		if (x.type === "password") {
+				x.type = "text";
+		} else {
+				x.type = "password";
+		}
+}
+</script>
 </body>
 </html>
 
@@ -101,10 +110,10 @@ session_start();session_destroy();
 if(isset($_POST["submit"])){
 	$error =array();
 	if(empty(trim($_POST["memID"]))){
-		$error="memID";	
+		$error="memID";
 	}
 	if(empty(trim($_POST["password"]))){
-		$error="password";	
+		$error="password";
 	}
 	if(empty($error)){
 		session_start();
@@ -123,6 +132,9 @@ if(isset($_POST["submit"])){
 				else if($_SESSION['memID']=="sec000"){
 					header ("location:sec.php");
 				}
+				else if($_SESSION['memID']=="admin000"){
+					header ("location:admin.php");
+				}
 				else{
 					header ("location:user.php");
 				}
@@ -140,7 +152,7 @@ if(isset($_POST["submit"])){
 					</div>';
 			}
 		}
-		
+
 	}
 }
 

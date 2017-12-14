@@ -1,29 +1,20 @@
 <?php
-require 'connect.php';
+session_start();
 
-function count_queries($attribute){
-	require 'connect.php';
-	if($is_count_query_run=mysqli_query($connect,$attribute)){
-		while($count_query_execute=mysqli_fetch_assoc($is_count_query_run)){
-			return $count_query_execute['COUNT(*)'];
-		}
+//access controlling
+if(!isset($_SESSION["memID"]) || !isset($_SESSION["password"])){
+	if($_SESSION['memID']!="reg000"){
+		header ("location:login.php");
 	}
 }
+
+//importing pages
+require 'connect.php';require 'function.php';
+
+
 $count_query="SELECT COUNT(*) FROM member_details";
 $memID_temp="oba".count_queries($count_query);
-//echo $memID=++$memID_temp;
-
-	
-function check_queries($attribute){
-	require 'connect.php';
-	if($is_check_query_run=mysqli_query($connect,$attribute)){
-		if(mysqli_num_rows($is_check_query_run) == 1){
-			return false;
-		}
-		else {return true;}
-	}
-}
-
+$memID=++$memID_temp;
 
 //updating attributes
 if(isset($_POST["add_member"])){
@@ -31,6 +22,7 @@ if(isset($_POST["add_member"])){
 	if(check_queries($check_query)){
 		echo "yes";
 		$add_query="INSERT INTO members_login_details (MembershipID, Password) VALUES ('$memID', '$memID')";
+		$add2_query="INSERT INTO members_contributions (MembershipID,Contributions) VALUES ('$memID',NULL)";
 		$update_memID_firstname_lastname_admission_query="INSERT INTO member_details (MembershipID, Firstname, Lastname, Address1, Address2,Mobile, Fixed, Email, Birthday, NIC, Occupation, Civil_status, Admission,Begin, End) VALUES ('$memID', '".$_POST["firstname"]."','".$_POST["lastname"]."', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,'".$_POST["admission"]."', NULL, NULL)";
 		$update_address1_query="UPDATE `member_details` SET `Address1` = '".$_POST["address1"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
 		$update_address2_query="UPDATE `member_details` SET `Address2` = '".$_POST["address2"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
@@ -42,8 +34,10 @@ if(isset($_POST["add_member"])){
 		$update_occupation_query="UPDATE `member_details` SET `Occupation` = '".$_POST["occupation"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
 		$update_begin_query="UPDATE `member_details` SET `Begin` = '".$_POST["begin"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
 		$update_end_query="UPDATE `member_details` SET `End` = '".$_POST["end"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-		
+		$update_pic_query="UPDATE `member_details` SET `Pic` = 'NULL'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+
 		$is_add_query_run=mysqli_query($connect,$add_query);
+		$is_add2_query_run=mysqli_query($connect,$add2_query);
 		$is_update_memID_query_run=mysqli_query($connect,$update_memID_firstname_lastname_admission_query );
 		if(isset($_POST["address1"])){$is_update_address1_query_run=mysqli_query($connect,$update_address1_query );}
 		if(isset($_POST["address2"])){$is_update_address2_query_run=mysqli_query($connect,$update_address2_query );}
@@ -56,8 +50,7 @@ if(isset($_POST["add_member"])){
 		//if(isset($_POST["civil_status"])){$is_update_civil_status_query_run=mysqli_query($connect,$update_civil_status_query );}
 		if(isset($_POST["begin"])){$update_begin_query_run=mysqli_query($connect,$update_begin_query );}
 		if(isset($_POST["end"])){$update_end_query_run=mysqli_query($connect,$update_end_query );}
-		//header ("location:reg.php");
-	}
+	}header ("location:reg_advanced_signup.php");
 }
 
 ?>
@@ -66,10 +59,7 @@ if(isset($_POST["add_member"])){
 <head>
 <!--setting the title-->
 <title>Add a Member</title>
-<!--adding bootstrap-->
-<link rel="stylesheet" href="bootstrap.min.css">
-	<script src="jquery.min.js"></script>
-	<script src="bootstrap.min.js"></script>
+	<!--importing bootstrap-->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -77,7 +67,6 @@ if(isset($_POST["add_member"])){
 body{
 	width:100%;
 	height:100%;
-	background-image:url('background.jpg');
 	background-size:cover;
 }
 #one{
@@ -89,15 +78,17 @@ body{
 </style>
 </head>
 <body>
+
+<!-- navigation bar -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
-          <span class="icon-bar"></span>                        
+          <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand"><?php //echo "<b>Add A Member</b>"; ?></a>
+      <a class="navbar-brand"><?php echo "<b>Add A Member</b>"; ?></a>
     </div>
     <div>
       <div class="collapse navbar-collapse" id="myNavbar">
@@ -110,9 +101,18 @@ body{
   </div>
 </nav>
 <br><br><br>
+
+<!-- form area -->
 <form enctype="multipart/form-data" action="reg_advanced_signup.php" method="post">
 	<div class="container" align="center" style="background-color:#AFEEEE">
 		<div class="container-fluid" style="background-color:#00EEEE"><h2>Contact Details</h2></div><h2></h2>
+
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-2" align="left"><label>MembershipID </label></div>
+			<div class="col-md-4"><input class="form-control" type="text" name="memID" readonly value="<?php echo $memID;?>">
+			</div>
+		</div>
 
 		<div class="row">
 			<div class="col-md-2"></div>

@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <?php
-session_start();require 'connect.php';
+session_start();
+$_SESSION['searched_memID']='';
+
+//importing pages
+require 'connect.php';require 'function.php';
+
+//access controlling
 if(!isset($_SESSION["memID"]) || !isset($_SESSION["password"])){
+		header ("location:login.php");
+}
+if($_SESSION['memID']!="reg000"){
 	header ("location:login.php");
 }
 
-if(isset($_POST['search'])){
-	seach_query();
+if(isset($_POST['search']) && isset($_POST['search_memID'])){
+	if(!seach_query()){
+		dislplay_alerts("danger","reg.php","There is no account from this membershipID");
+	}
 }
 ?>
 
@@ -15,9 +26,6 @@ if(isset($_POST['search'])){
 
 
 <head><title>Hello, Registrar!</title>
-	<link rel="stylesheet" href="bootstrap.min.css">
-	<script src="jquery.min.js"></script>
-	<script src="bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -31,28 +39,41 @@ body{
 #one{
 			width:100%;
 			height:100%;
-			background-image:url('navbar.jpg');
 			background-size:cover;
 		}
 </style>
 	</head>
 	<body>
-	<!--<input type="submit" name="button" id="button" value="Submit" disabled>
-	<input type="checkbox" name="accept" id="accept" value="abc">-->
-<div class="container" id="one"><h2></h2>
-	<div class="col-md-2"><input class='form-control' type='button' name='add_account' onclick="location.href='reg_advanced_signup.php'" value='Add Account'></div>
-	<div class="col-md-2"><button type="button" class="btn btn-default" onclick="location.href='change_password.php';">Change Password</button></div>
-	<div class="col-md-6"></div>
-	<div class="col-md-2">
+
+<!-- navigation bar -->
+<div class="container-fluid" id="one"><h2></h2>
+	<div class="col-md-10"></div>
 	<ul class="nav nav-pills">
-		<li class="active"><a href="#"><?php echo "Registrar";?></a></li>
-		<li><a href="login.php"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
-	</ul><h2></h2></div>
-</div>
-<div class='container'>
+		<li class="active"><a href="#">Registrar</a></li>
+		<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-tasks"></span> Options<span class="caret"></span></a>
+			<ul class="dropdown-menu">
+				<li><a href="change_password.php"><span class="glyphicon glyphicon-pushpin"></span> Change Password</a></li>
+				<li><a href="reg_advanced_signup.php"><span class="glyphicon glyphicon-plus"></span> Add Account</a></li>
+				<li><a href="login.php"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
+			</ul>
+	</li></ul><br>
+</div><h2></h2>
+
+<!-- searching area -->
+<div class='container'><br>
 	<div class='row'>
 		<div class='col-md-9'>
 		<div class='container'>
+			<div class="row">
+				<form action="reg.php" method="post">
+				<div class='col-md-4'>
+				<input class='form-control' type='text' name='search_name'>
+				</div>
+				<div class="col-md-2">
+					<input class="form-control" type="submit" name="searchN" value="Search by Name">
+				</div>
+			</form>
+			</div>
 			<div class='row'>
 			<h2></h2>
 				<form action='reg.php' method='post'>
@@ -74,6 +95,8 @@ body{
 			</div>
 		</div>
 		</div>
+
+	<!-- notification area -->
 	<div class='col-md-3'>
 		<h2></h2>
 		<div class='panel-group'><div class='panel panel-info'><div class='panel-heading'>Notifications</div>
@@ -85,81 +108,48 @@ body{
 				  notification($requests1_query);
 					?>
 			  </span>
-			  </td></tr><tr><td>
-			  <a href="requests.php"><span class="glyphicon glyphicon-envelope"></span>pending requests</a></td><td>
-			  <span class="badge">
-				  <?php
-				  $requests2_query="SELECT COUNT(*) FROM signup_requests";
-				  notification($requests2_query);
-					?>
-			  </span></td></tr></table>
+			  </td></tr></table>
 		</div></div></div></div></div></div>
+		<?php
+				$itr1=0;
+		if(isset($_POST['searchN'])){
+			$_SESSION['searched_memID']='';
+			echo "<div class='container'><table class='table table-striped'><thead><tr><th>MembershipID</th><th>Firstname</th><th>Lastname</th></tr></thead><tbody>";
+			$seach_by_name_query="SELECT * FROM `member_details` WHERE Firstname='".$_POST['search_name']."'";
+			if($is_seach_by_name_query_run=mysqli_query($connect,$seach_by_name_query)){
+				while($seach_by_name_query_execute=mysqli_fetch_assoc($is_seach_by_name_query_run)){
+					echo "<tr>";
+					echo "<td>".$seach_by_name_query_execute['MembershipID']."</td>";
+					echo "<td>".$seach_by_name_query_execute['Firstname']."</td>";
+					echo "<td>".$seach_by_name_query_execute['Lastname']."</td>";
+					if($seach_by_name_query_execute['Pic']!=NULL){
+						echo "<td><img src = '".$seach_by_name_query_execute['Pic']."' style = 'height:150px;width:150px'></td>";}
+					else{
+						echo "<td><img src = 'pics/default.png' style = 'height:150px;width:150px'></td>";}
+					$itr1++;
+					echo "</tr>";
+				}
+			}
+			$seach_by_lname_query="SELECT * FROM `member_details` WHERE Lastname='".$_POST['search_name']."'";
+			if($is_seach_by_lname_query_run=mysqli_query($connect,$seach_by_lname_query)){
+				while($seach_by_lname_query_execute=mysqli_fetch_assoc($is_seach_by_lname_query_run)){
+					echo "<tr>";
+					echo "<td>".$seach_by_lname_query_execute['MembershipID']."</td>";
+					echo "<td>".$seach_by_lname_query_execute['Firstname']."</td>";
+					echo "<td>".$seach_by_lname_query_execute['Lastname']."</td>";
+					if($seach_by_lname_query_execute['Pic']!=NULL){
+						echo "<td><img src = '".$seach_by_lname_query_execute['Pic']."' style = 'height:150px;width:150px'></td>";}
+					else{
+						echo "<td><img src = 'pics/default.png' style = 'height:150px;width:150px'></td>";}
+					$itr1++;
+					echo "</tr>";
+				}
+			}
+			echo "</table></div>";
 
-<?php
-function notification($requests_query){
-	require 'connect.php';
-	if($is_requests_query_run=mysqli_query($connect,$requests_query)){
-		while($requests_query_execute=mysqli_fetch_assoc($is_requests_query_run)){
-			echo $requests_query_execute['COUNT(*)'];
 		}
-	}
-	else
-	{
-		echo '<div class="container">
-				<div class="row">
-					<div class="col-md-4"></div>
-					<div class="col-md-4">
-						<div class="alert alert-danger alert-dismissable">
-						<a href="reg.php" class="close" data-dismiss="alert" arial-label="close">&times</a>
-						<strong>WTF</strong></div><br>
-					</div>
-					<div class="col-md-4"></div>
-				</div>
-			</div>';
-	}
-}
 
-function seach_query(){
-	require 'connect.php';
-	$search_query="SELECT * FROM `member_details` WHERE MembershipID='".$_POST['search_memID']."'";
-	if($is_search_query_run=mysqli_query($connect,$search_query)){
-		if(!empty($search_query_execute=mysqli_fetch_assoc($is_search_query_run))){
-			$_SESSION['searched_memID']=$search_query_execute['MembershipID'];
-			$returning_array[0]=$search_query_execute['MembershipID'];
-			$returning_array[1]=$search_query_execute['Firstname'];
-			$returning_array[2]=$search_query_execute['Lastname'];
-			return $returning_array;
-		}
-			else{ 
-			echo '<div class="container">
-					<div class="row">
-						<div class="col-md-4"></div>
-						<div class="col-md-4">
-							<div class="alert alert-danger alert-dismissable">
-							<a href="reg.php" class="close" data-dismiss="alert" arial-label="close">&times</a>
-							<strong>There is no account from this membershipID</strong>
-							</div><br>
-						</div>
-						<div class="col-md-4"></div>
-					</div>
-				</div>';
-		}
-	}
-}
-
-function show_query(){
-	require 'connect.php';
-	$show_contribution_query="SELECT * FROM `members_contributions` WHERE MembershipID='".$_SESSION['searched_memID']."'";
-	$is_show_contribution_query_run=mysqli_query($connect,$show_contribution_query);
-	$show_contribution_query_execute=mysqli_fetch_assoc($is_show_contribution_query_run);
-	return $show_contribution_query_execute['Contributions'];
-}
-function update_query(){
-	require 'connect.php';
-	$update_contribution_query="UPDATE `members_contributions` SET `Contributions` = '".show_query()." ".$_POST['add'].".' WHERE `members_contributions`.`MembershipID` = '".$_SESSION['searched_memID']."'" ;
-	$is_update_contribution_query_run=mysqli_query($connect,$update_contribution_query);
-}
-?>
+		?>
 
 </body>
 </html>

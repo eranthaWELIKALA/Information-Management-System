@@ -1,7 +1,18 @@
 <?php
 	session_start();
+
+	//access controlling
+	if(!isset($_SESSION["memID"]) || !isset($_SESSION["password"])){
+		if($_SESSION['memID']!="reg000"){
+			header ("location:login.php");
+		}
+	}
+
+	//checking page function requirements
 	if(!isset($_SESSION['searched_memID'])){header ("location:reg.php");}
-	require 'connect.php';
+
+	//importing pages
+	require 'connect.php';	require 'function.php';
 
 	$details_query="SELECT * FROM member_details  WHERE MembershipID='".$_SESSION['searched_memID']."'";
 	$memID=$_SESSION['searched_memID'];
@@ -26,8 +37,7 @@ if(isset($_POST["update"])){
 	$update_addmission_query="UPDATE `member_details` SET `Admission` = '".$_POST["admission"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
 	$update_begin_query="UPDATE `member_details` SET `Begin` = '".$_POST["begin"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
 	$update_end_query="UPDATE `member_details` SET `End` = '".$_POST["end"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_image_query="UPDATE `member_details` SET `Image` = '".$_POST["image"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	
+
 	if(isset($_POST["firstname"])){$is_update_firstname_query_run=mysqli_query($connect,$update_firstname_query );}
 	if(isset($_POST["lastname"])){$is_update_lastname_query_run=mysqli_query($connect,$update_lastname_query );}
 	if(isset($_POST["address1"])){$is_update_address1_query_run=mysqli_query($connect,$update_address1_query );}
@@ -42,47 +52,39 @@ if(isset($_POST["update"])){
 	if(isset($_POST["admission"])){$update_addmission_query_run=mysqli_query($connect,$update_addmission_query );}
 	if(isset($_POST["begin"])){$update_begin_query_run=mysqli_query($connect,$update_begin_query );}
 	if(isset($_POST["end"])){$update_end_query_run=mysqli_query($connect,$update_end_query );}
-	if(isset($_POST["image"])){$update_image_query_run=mysqli_query($connect,$update_image_query );}
 	header ("location:reg_advanced_search.php");
 }
 
-function refresh($attribute){
-	if(isset($_POST["update"])){
-		echo $query_execute[$attribute];
-	}
-}
 
-
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html>
 <head>
   <title><?php echo $_SESSION['searched_memID']; ?></title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="bootstrap.min.css">
-	<script src="jquery.min.js"></script>
-	<script src="bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
   body {
-      position: relative; 
+      position: relative;
   }
-  #details1 {padding-top:50px;height:675px;color: #000; background-color: #1E88E5;}
+  #details1 {padding-top:50px;height:775px;color: #000; background-color: #1E88E5;}
   #details2 {padding-top:50px;height:675px;color: #000; background-color: #673ab7;}
   #details3 {padding-top:50px;height:675px;color: #000; background-color: #ff9800;}
   </style>
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="50">
 
+<!-- navigation bar -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
-          <span class="icon-bar"></span>                        
+          <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="#"><?php echo "<b>".$_SESSION['searched_memID']."</b>"; ?></a>
     </div>
@@ -97,36 +99,43 @@ function refresh($attribute){
       </div>
     </div>
   </div>
-</nav>    
+</nav>
+
+<!-- form area -->
 <form action="reg_advanced_search.php" method="post">
 <div id="details1" class="container-fluid"><br><br>
   <h1>Contact Details</h1>
-  <div class='container'><table class='table table-bordered table-striped'><tbody><input class="form-control" type="submit" name="update" value="Update"><br>
-  <tr><td>Firstname</td><td><input class="form-control" type="text" name="firstname" value="<?php 
+  <div class='container'>
+		<div class="row">
+			<div class="col-md-10"></div>
+			<div class="col-md-2"><?php if($query_execute['Pic']!=NULL){echo "<img src = '".$query_execute['Pic']."' style = 'height:150px;width:150px'>";}else{echo "<img src = 'pics/default.png' style = 'height:150px;width:150px'>";} ?></div>
+		</div><br>
+	<table class='table table-bordered table-striped'><tbody><input class="form-control" type="submit" name="update" value="Update"><br>
+  <tr><td>Firstname</td><td><input class="form-control" type="text" name="firstname" value="<?php
 																										echo $query_execute['Firstname'];
 																										refresh('Firstname');
 																									?>"></td></tr>
-  <tr><td>Lastname</td><td><input class="form-control" type="text" name="lastname" value="<?php  
+  <tr><td>Lastname</td><td><input class="form-control" type="text" name="lastname" value="<?php
 																									echo $query_execute['Lastname'];
 																									refresh('Lastname');
 																								?>"></td></tr>
-  <tr><td>Address1</td><td><input class="form-control" type="text" name="address1" value="<?php 
+  <tr><td>Address1</td><td><input class="form-control" type="text" name="address1" value="<?php
 																									echo $query_execute['Address1'];
 																									refresh('Address1');
 																								?>"></td></tr>
-  <tr><td>Address2</td><td><input class="form-control" type="text" name="address2" value="<?php 
+  <tr><td>Address2</td><td><input class="form-control" type="text" name="address2" value="<?php
 																									echo $query_execute['Address2'];
 																									refresh('Address2');
 																								?>"></td></tr>
-  <tr><td>Mobile No.</td><td><input class="form-control" type="text" name="mobile" placeholder="07X-XXXXXXX" value="<?php 
+  <tr><td>Mobile No.</td><td><input class="form-control" type="text" name="mobile" placeholder="07X-XXXXXXX" value="<?php
 																															echo $query_execute['Mobile'];
 																															refresh('Mobile');
 																														?>"></td></tr>
-  <tr><td>Fixed Tel No.</td><td><input class="form-control" type="text" name="fixed" placeholder="0XX-XXXXXXX" value="<?php 
+  <tr><td>Fixed Tel No.</td><td><input class="form-control" type="text" name="fixed" placeholder="0XX-XXXXXXX" value="<?php
 																															echo $query_execute['Fixed'];
 																															refresh('Fixed');
 																														?>"></td></tr>
-  <tr><td>email</td><td><input class="form-control" type="email" name="email" placeholder="example@email.com" value="<?php 
+  <tr><td>email</td><td><input class="form-control" type="email" name="email" placeholder="example@email.com" value="<?php
 																																	echo $query_execute['Email'];
 																																	refresh('Email');
 																																?>"></td></tr>
@@ -135,15 +144,15 @@ function refresh($attribute){
 <div id="details2" class="container-fluid"><br><br>
   <h1>Personal Details</h1><br><br>
   <div class='container'><table class='table table-bordered table-striped'><tbody>
-  <tr><td>Birthday</td><td><input class="form-control" type="date" name="birthday" placeholder="YYYY-MM-DD" value="<?php 
+  <tr><td>Birthday</td><td><input class="form-control" type="date" name="birthday" placeholder="YYYY-MM-DD" value="<?php
 																																echo $query_execute["Birthday"];
 																																refresh('Birthday');
 																															?>"></td></tr>
-  <tr><td>National ID no.</td><td><input class="form-control" type="text" name="nic" placeholder="XXXXXXXXXV" value="<?php 
+  <tr><td>National ID no.</td><td><input class="form-control" type="text" name="nic" placeholder="XXXXXXXXXV" value="<?php
 																															echo $query_execute["NIC"];
 																															refresh('NIC');
 																														?>"></td></tr>
-  <tr><td>Occupation</td><td><input class="form-control" type="text" name="occupation" value="<?php 
+  <tr><td>Occupation</td><td><input class="form-control" type="text" name="occupation" value="<?php
 																										echo $query_execute["Occupation"];
 																										refresh('Occupation');
 																									?>"></td></tr>
@@ -162,20 +171,22 @@ function refresh($attribute){
 			?></td></tr>
   </tbody></table>
   <table class='table table-bordered table-striped'><tbody>
-  <tr><td>Admission no.</td><td><input class="form-control" type="text" name="admission" value="<?php 
+  <tr><td>Admission no.</td><td><input class="form-control" type="text" name="admission" value="<?php
 																										echo $query_execute["Admission"];
 																										refresh('Admission');
 																									?>"></td><td></td></tr>
-  <tr><td>Period of Study</td><td>from: <input class="form-control" type="date" name="begin" placeholder="YYYY-MM-DD" value="<?php 
+  <tr><td>Period of Study</td><td>from: <input class="form-control" type="date" name="begin" placeholder="YYYY-MM-DD" value="<?php
 																																			echo $query_execute["Begin"];
 																																			refresh('Begin');
-																																		?>"></td><td>to: <input class="form-control" type="date" name="end" placeholder="YYYY-MM-DD" value="<?php 
+																																		?>"></td><td>to: <input class="form-control" type="date" name="end" placeholder="YYYY-MM-DD" value="<?php
 																																		echo $query_execute["End"];
 																																		refresh('End');
 																																		?>"></td></tr>
   </tbody></table></form>
   </div>
 </div>
+
+<!-- contribution form area -->
 <div id="details3" class="container-fluid"><br><br>
   <h1>Contributions</h1><br><br>
   <div class='container'>
@@ -190,43 +201,21 @@ function refresh($attribute){
 		</form>
 	</div>
   </div><br><br>
+
   <?php
-function show_query(){
-	require 'connect.php';
-	$show_contribution_query="SELECT * FROM `members_contributions` WHERE MembershipID='".$_SESSION['searched_memID']."'";
-	$is_show_contribution_query_run=mysqli_query($connect,$show_contribution_query);
-	$show_contribution_query_execute=mysqli_fetch_assoc($is_show_contribution_query_run);
-	return $show_contribution_query_execute['Contributions'];
-}
-function update_query(){
-	require 'connect.php';
-	$update_contribution_query="UPDATE `members_contributions` SET `Contributions` = '".show_query()." ".$_POST['add'].".' WHERE `members_contributions`.`MembershipID` = '".$_SESSION['searched_memID']."'" ;
-	$is_update_contribution_query_run=mysqli_query($connect,$update_contribution_query);
-}
-if(isset($_SESSION['searched_memID'])){
+	//updating contribution
+	if(isset($_SESSION['searched_memID'])){
 	if(isset($_POST['add_con'])){
 		if(isset($_POST['add'])){
 			update_query();
 		}
-		
-		else{ 
-			echo '<div class="container">
-					<div class="row">
-						<div class="col-md-4"></div>
-						<div class="col-md-4">
-							<div class="alert alert-warning alert-dismissable">
-							<a href="reg.php" class="close" data-dismiss="alert" arial-label="close">&times</a>
-							<strong>There is no new contribution</strong>
-							</div><br>
-						</div>
-						<div class="col-md-4"></div>
-					</div>
-				</div>';
+		else{
+			dislplay_alerts("warning","reg_advanced_search.php","There is no new contribution");
 		}
 	}
 	 echo "<div class='container'><div class='row'><div class='col-md-9'><textarea class='form-control' rows='6' cols='25' readonly>". show_query()."</textarea></div></div></div>";
 }
-?>
+	?>
 </div>
 
 </body>

@@ -6,14 +6,14 @@
 
 		$admission=$_SESSION['admission'];
 		$password=$_SESSION['password'];
-		
+
 		require 'connect.php';
 		$details_query="SELECT * FROM temp_login_details  WHERE Admission='$admission'";
 
 		if($is_details_query_run=mysqli_query($connect,$details_query)){
 			$details_query_execute=mysqli_fetch_assoc($is_details_query_run);
-		} 
-		
+		}
+
 		if(isset($_POST['done'])){
 		$delete_query="DELETE FROM `temp_login_details` WHERE `temp_login_details`.`Admission` = '$admission' ";
 			if($is_delete_query_run=mysqli_query($connect,$delete_query)){
@@ -36,12 +36,11 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	
+
 	<style>
 		body{
 			width:100%;
 			height:100%;
-			background-image:url('userbackground.jpg');
 			background-size:cover;
 			padding:15px;
 		}

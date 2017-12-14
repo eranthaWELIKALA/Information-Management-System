@@ -1,11 +1,20 @@
 <!DOCTYPE html>
-<?php session_start(); session_destroy(); ?>
+<?php
+require 'function.php';
+session_start();
+if(isset($_SESSION['status'])){
+	if($_SESSION['status']=true){
+		dislplay_alerts("success","home.php","<p align='center'>Your request was sent successfully. <br>Temporary Login will be available, if request is approved</p>");
+	}
+}
+
+session_destroy(); ?>
 <html>
 <head>
 	<title>Home</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	
+
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -13,7 +22,7 @@
 	<!-- Latest compiled and minified CSS -->
 			<!--Font Awesome CSS-->
 			<link rel="stylesheet" href="css/font-awesome.min.css">
-	
+
 	<!--<link rel="stylesheet" href="bootstrap.min.css">
 	<script src="jquery.min.js"></script>
 	<script src="bootstrap.min.js"></script>-->
@@ -24,7 +33,7 @@
 			background-image:url('background-2.jpg');
 			background-size:cover;
 		}
-		
+
 		#one{
 			background-image:url('background-1.jpg');
 			background-repeat:no-repeat;
@@ -32,9 +41,9 @@
 			background-position: center;
 			padding: 35px;
 		}
-		
+
 		a:link{color:#FFFF}
-		
+
 		.carousel .item{
 			height: 200px;
 		}
@@ -44,7 +53,7 @@
 <body>
 
 <div style="color:#0000" link="white">
-	
+
 	<!--logo of the school-->
 	<div class="container" align="center">
 		<div class="row">
@@ -62,8 +71,8 @@
 		<div class="row">
 			<ul class="list-inline">
 				<li style="list-style:none">
-					<a href="https://goo.gl/maps/9rgRRv8z7N92" style="color: blue">	
-							<i class="fa fa-map-marker"></i>								
+					<a href="https://goo.gl/maps/9rgRRv8z7N92" style="color: blue">
+							<i class="fa fa-map-marker"></i>
 						St. Anthony's College, Kandy.
 					</a>
 				</li>
@@ -110,11 +119,11 @@
 <h6></h6>
 <!--slide show area-->
 <div class="container">
-	<div class="row"> 
+	<div class="row">
 		<div class="col-md-4"></div>
 		<div class="col-md-4">
 		  <div id="myCarousel" class="carousel slide" data-ride="carousel">
-			
+
 			<!-- Indicators -->
 			<ol class="carousel-indicators">
 			  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -131,7 +140,7 @@
 			  <div class="item">
 				<img src="College_Bus.jpg" style="height:100%">
 			  </div>
-			
+
 			  <div class="item">
 				<img src="Centenary_Hall.jpg" style="height:100%, width:100%">
 			  </div>
@@ -142,12 +151,12 @@
 			   <span class="glyphicon glyphicon-chevron-left"></span>
 			  <span class="sr-only">Previous</span>
 			</a>
-			
+
 			<a class="right carousel-control" href="#myCarousel" data-slide="next">
 			   <span class="glyphicon glyphicon-chevron-right"></span>
 			  <span class="sr-only">Next</span>
 			</a>
-			
+
 		  </div>
 		</div>
 	</div>

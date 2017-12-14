@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <?php
 session_start();
-/*if(!isset($_SESSION["memID"]) || !isset($_SESSION["password"])){
-	header ("location:login.php");
-}*/
+
+//access controlling
+if(!isset($_SESSION["memID"]) || !isset($_SESSION["password"])){
+	if($_SESSION['memID']!="reg000"){
+		header ("location:login.php");
+	}
+}
 ?>
 <html>
 <head>
 <!--setting the title-->
 <title>Requests</title>
-<!--adding bootstrap-->
+<!--importing bootstrap-->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -17,7 +21,6 @@ session_start();
 body{
 	width:100%;
 	height:100%;
-	background-image:url('background.jpg');
 	background-size:cover;
 }
 #one{
@@ -30,28 +33,27 @@ body{
 </head>
 <body>
 
+<!-- navigation bar -->
 <div class="container" id="one"><h2></h2>
-	<div class="col-md-10"></div><div class="col-md-2">
+	<div class="col-md-2"><ul class="nav nav-pills">
+		<li><a href="reg.php"><span class="glyphicon glyphicon-chevron-left"></span> Back</a></li>
+		</ul></div>
+	<div class="col-md-8"></div>
+	<div class="col-md-2">
 	<ul class="nav nav-pills">
 		<li class="active"><a href="#"><?php echo "Registrar";?></a></li>
 		<li><a href="login.php"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
 	</ul><h2></h2></div>
 </div>
 
+
+<!-- request diplaying area -->
 <div class='container'>
 
 <?php
 
-require 'connect.php';
+require 'connect.php';require 'function.php';
 
-function count_queries($attribute){
-	require 'connect.php';
-	if($is_count_query_run=mysqli_query($connect,$attribute)){
-		while($count_query_execute=mysqli_fetch_assoc($is_count_query_run)){
-			return $count_query_execute['COUNT(*)'];
-		}
-	}
-}
 
 $requests_query="SELECT COUNT(*) FROM signup_requests";
 if($is_requests_query_run=mysqli_query($connect,$requests_query)){
@@ -66,8 +68,6 @@ $requests_query="SELECT * FROM signup_requests";
 
 if($is_requests_query_run=mysqli_query($connect,$requests_query)){
 	$itr1=0;
-	$value=1;
-	$memIDArray=array();
 	echo "<div class='container'><table class='table table-striped'><thead><tr><th>Admission No.</th><th>Firstname</th><th>Lastname</th><th></th></tr></thead><tbody>";
 	while($requests_query_execute=mysqli_fetch_assoc($is_requests_query_run)){
 		$admissionArray[$itr1]=$requests_query_execute['Admission'];
@@ -79,11 +79,10 @@ if($is_requests_query_run=mysqli_query($connect,$requests_query)){
 		echo "<td>".$requests_query_execute['Admission']."</td>";
 		echo "<td>".$requests_query_execute['Firstname']."</td>";
 		echo "<td>".$requests_query_execute['Lastname']."</td>";
+		if($acceptedArray[$itr1]){echo "<td><input class='form-control' type='radio' checked disabled></td>";}
+		else{echo "<td><input class='form-control' type='radio' disabled></td>";}
 		echo "<td><form method='post' action='requests.php'><input class='form-control' type='submit' name='".$admissionArray[$itr1]."' value='ACCEPT'></td>";
 		echo "<td><input class='form-control' type='submit' name='".$admissionArray[$itr1]."undo"."' value='REJECT'></form></td>";
-		/*echo "<div class='row'><div class='col-md-2' style='align:center'>".$requests_query_execute['MembershipID']."</div><div class='col-md-3' style='align:center'>".$requests_query_execute['Firstname']."</div><div class='col-md-3' style='align:center'>".$requests_query_execute['Lastname']."</div>";
-		echo "<div class='col-md-2'><form method='post' action='requests.php'><input class='form-control' type='submit' name='".$memIDArray[$itr1]."' value='ACCEPT'></div>";
-		echo "<div class='col-md-2'><input class='form-control' type='submit' name='".$memIDArray[$itr1]."undo"."' value='UNDO'></div></div></form>";*/
 		$itr1++;
 		echo "</tr>";
 	}
@@ -98,7 +97,7 @@ for($itr2=0;$itr2<$itr1;$itr2++){
 		if($is_accepted_query_run){
 			header ("location:requests.php");
 		}
-		
+
 	}
 }
 
@@ -110,8 +109,9 @@ for($itr3=0;$itr3<$itr1;$itr3++){
 		$is_undo_query_run=mysqli_query($connect,$undo_query);
 		if($is_undo_query_run){
 			//echo "jump";
+			header ("location:requests.php");
 		}
-		
+
 	}
 }
 
@@ -129,19 +129,24 @@ if(isset($_POST["done"])){
 		echo $lastname;
 		echo $admission;
 		$add1_query="INSERT INTO members_login_details (MembershipID, Password) VALUES ('$memID', '$password')";
-		$add2_query="INSERT INTO member_details (MembershipID, Firstname, Lastname, Address1, Address2,Mobile, Fixed, Email, Birthday, NIC, Occupation, Civil_status, Admission,Begin, End) VALUES ('$memID', '$firstname', '$lastname', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$admission', NULL, NULL)";
+		$add2_query="INSERT INTO member_details (MembershipID, Firstname, Lastname, Address1, Address2,Mobile, Fixed, Email, Birthday, NIC, Occupation, Civil_status, Admission,Begin, End,Pic) VALUES ('$memID', '$firstname', '$lastname', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$admission', NULL, NULL,NULL)";
 		$add3_query="INSERT INTO temp_login_details (Admission, Password, MembershipID) VALUES ('$admission', '$password', '$memID')";
+		$add4_query="INSERT INTO members_contributions (MembershipID, Contributions) VALUES ('$memID', NULL)";
 		if($accepted=='1'){
 			$is_add1_query_run=mysqli_query($connect,$add1_query);
 			$is_add2_query_run=mysqli_query($connect,$add2_query);
 			$is_add3_query_run=mysqli_query($connect,$add3_query);
+			$is_add4_query_run=mysqli_query($connect,$add4_query);
 			if($is_add1_query_run){
 				//echo "jump";
 			}
 			if($is_add2_query_run){
 				//echo "jump";
-			}	
+			}
 			if($is_add3_query_run){
+				//echo "jump";
+			}
+			if($is_add4_query_run){
 				//echo "jump";
 			}
 		}
@@ -159,7 +164,7 @@ if(isset($_POST["deleteall"])){
 	if($is_delete_query_run){
 		header ('location:reg.php');
 	}
-} 
+}
 ?>
 <form action='requests.php' method='post'>
 <div class='row'><div class='col-md-4'></div><div class='col-md-4'><input class="form-control" type="submit" name="done" value="DONE"></div></div>
@@ -172,6 +177,3 @@ if(isset($_POST["deleteall"])){
 
 
 </html>
-
-
-

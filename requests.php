@@ -2,6 +2,9 @@
 <?php
 session_start();
 
+//importing pages
+require 'connect.php';require 'function.php';
+
 //access controlling
 if(!isset($_SESSION["memID"]) || !isset($_SESSION["password"])){
 	if($_SESSION['memID']!="reg000"){
@@ -34,26 +37,38 @@ body{
 <body>
 
 <!-- navigation bar -->
-<div class="container" id="one"><h2></h2>
-	<div class="col-md-2"><ul class="nav nav-pills">
-		<li><a href="reg.php"><span class="glyphicon glyphicon-chevron-left"></span> Back</a></li>
-		</ul></div>
-	<div class="col-md-8"></div>
-	<div class="col-md-2">
-	<ul class="nav nav-pills">
-		<li class="active"><a href="#"><?php echo "Registrar";?></a></li>
-		<li><a href="login.php"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
-	</ul><h2></h2></div>
-</div>
-
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Registrar</a>
+    </div>
+    <div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+			<li><a href="reg.php"><span class="glyphicon glyphicon-chevron-left"></span> Back</a></li>
+			<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-tasks"></span> Options<span class="caret"></span></a>
+			<ul class="dropdown-menu">
+				<li><a href="change_password.php"><span class="glyphicon glyphicon-pushpin"></span> Change Password</a></li>
+				<li><a href="reg_advanced_signup.php"><span class="glyphicon glyphicon-plus"></span> Add Account</a></li>
+				<li><a href="login.php"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
+			</ul>
+			</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+<br><br><br>
 
 <!-- request diplaying area -->
 <div class='container'>
 
 <?php
-
-require 'connect.php';require 'function.php';
-
 
 $requests_query="SELECT COUNT(*) FROM signup_requests";
 if($is_requests_query_run=mysqli_query($connect,$requests_query)){
@@ -64,7 +79,7 @@ if($is_requests_query_run=mysqli_query($connect,$requests_query)){
 	}
 }
 
-$requests_query="SELECT * FROM signup_requests";
+$requests_query="SELECT * FROM signup_requests WHERE Recommendation1_Accept=1 AND Recommendation2_Accept=1";
 
 if($is_requests_query_run=mysqli_query($connect,$requests_query)){
 	$itr1=0;

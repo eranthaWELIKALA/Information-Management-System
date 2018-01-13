@@ -7,7 +7,8 @@
 		$admission=$_SESSION['admission'];
 		$password=$_SESSION['password'];
 
-		require 'connect.php';
+		//importing pages
+		require 'connect.php';require 'function.php';
 		$details_query="SELECT * FROM temp_login_details  WHERE Admission='$admission'";
 
 		if($is_details_query_run=mysqli_query($connect,$details_query)){

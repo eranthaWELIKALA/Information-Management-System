@@ -16,7 +16,7 @@ if($_SESSION['memID']!="reg000"){
 
 if(isset($_POST['search']) && isset($_POST['search_memID'])){
 	if(!seach_query()){
-		dislplay_alerts("danger","reg.php","There is no account from this membershipID");
+		display_alerts("danger","reg.php","There is no account from this membershipID");
 	}
 }
 ?>
@@ -46,18 +46,33 @@ body{
 	<body>
 
 <!-- navigation bar -->
-<div class="container-fluid" id="one"><h2></h2>
-	<div class="col-md-10"></div>
-	<ul class="nav nav-pills">
-		<li class="active"><a href="#">Registrar</a></li>
-		<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-tasks"></span> Options<span class="caret"></span></a>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Registrar</a>
+    </div>
+    <div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+			<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-tasks"></span> Options<span class="caret"></span></a>
 			<ul class="dropdown-menu">
 				<li><a href="change_password.php"><span class="glyphicon glyphicon-pushpin"></span> Change Password</a></li>
 				<li><a href="reg_advanced_signup.php"><span class="glyphicon glyphicon-plus"></span> Add Account</a></li>
+				<li><a href="add_event.php"><span class="glyphicon glyphicon-plus"></span> Add a Pic to Home</a></li>
 				<li><a href="login.php"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
 			</ul>
-	</li></ul><br>
-</div><h2></h2>
+			</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+<br><br>
 
 <!-- searching area -->
 <div class='container'><br>
@@ -98,17 +113,29 @@ body{
 
 	<!-- notification area -->
 	<div class='col-md-3'>
-		<h2></h2>
+		<br>
 		<div class='panel-group'><div class='panel panel-info'><div class='panel-heading'>Notifications</div>
 		<div class='panel-body'><table><tr><td>
 		<a href="requests.php"><span class="glyphicon glyphicon-envelope"></span>unseen requests</a></td><td>
 		<span class="badge">
 				  <?php
-				  $requests1_query="SELECT COUNT(*) FROM signup_requests WHERE Accepted=false";
+				  $requests1_query="SELECT COUNT(*) FROM signup_requests WHERE Accepted=false AND Recommendation1_Accept=true AND Recommendation2_Accept=true";
 				  notification($requests1_query);
 					?>
 			  </span>
-			  </td></tr></table>
+			  </td></tr><tr><td>
+		<a href="edit_requests.php"><span class="glyphicon glyphicon-envelope" ></span>unseen editing requests</a></td><td>
+		<span class="badge">
+				  <?php
+				  $requests2_query="SELECT COUNT(*) FROM edit_requests WHERE Seen=false";
+				  notification($requests2_query);
+					?>
+			  </span>
+			  </td></tr>
+			  
+			  
+			  
+			  </table>
 		</div></div></div></div></div></div>
 		<?php
 				$itr1=0;
@@ -126,6 +153,7 @@ body{
 						echo "<td><img src = '".$seach_by_name_query_execute['Pic']."' style = 'height:150px;width:150px'></td>";}
 					else{
 						echo "<td><img src = 'pics/default.png' style = 'height:150px;width:150px'></td>";}
+					echo "<td> <a href='advanced_direct.php?direct_searched_memID=".$seach_by_name_query_execute['MembershipID']."' >More</a></td>";
 					$itr1++;
 					echo "</tr>";
 				}
@@ -141,6 +169,7 @@ body{
 						echo "<td><img src = '".$seach_by_lname_query_execute['Pic']."' style = 'height:150px;width:150px'></td>";}
 					else{
 						echo "<td><img src = 'pics/default.png' style = 'height:150px;width:150px'></td>";}
+					echo "<td> <a href='advanced_direct.php?direct_searched_memID=".$seach_by_name_query_execute['MembershipID']."' >More</a></td>";
 					$itr1++;
 					echo "</tr>";
 				}
@@ -150,6 +179,17 @@ body{
 		}
 
 		?>
+		<script type="text/javascript">
 
+		$(document).ready(function () {
+
+		window.setTimeout(function() {
+		    $(".alert").fadeTo(1500, 0).slideUp(500, function(){
+		        $(this).remove();
+		    });
+		}, 3000);
+
+		});
+		</script>
 </body>
 </html>

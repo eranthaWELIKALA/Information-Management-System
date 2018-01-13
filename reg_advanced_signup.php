@@ -15,13 +15,14 @@ require 'connect.php';require 'function.php';
 $count_query="SELECT COUNT(*) FROM member_details";
 $memID_temp="oba".count_queries($count_query);
 $memID=++$memID_temp;
+$passowrd=sha1($memID);
 
 //updating attributes
 if(isset($_POST["add_member"])){
 	$check_query="SELECT * FROM member_details WHERE Admission='".$_POST['admission']."'";
 	if(check_queries($check_query)){
 		echo "yes";
-		$add_query="INSERT INTO members_login_details (MembershipID, Password) VALUES ('$memID', '$memID')";
+		$add_query="INSERT INTO members_login_details (MembershipID, Password) VALUES ('$memID', '$passowrd')";
 		$add2_query="INSERT INTO members_contributions (MembershipID,Contributions) VALUES ('$memID',NULL)";
 		$update_memID_firstname_lastname_admission_query="INSERT INTO member_details (MembershipID, Firstname, Lastname, Address1, Address2,Mobile, Fixed, Email, Birthday, NIC, Occupation, Civil_status, Admission,Begin, End) VALUES ('$memID', '".$_POST["firstname"]."','".$_POST["lastname"]."', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,'".$_POST["admission"]."', NULL, NULL)";
 		$update_address1_query="UPDATE `member_details` SET `Address1` = '".$_POST["address1"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";

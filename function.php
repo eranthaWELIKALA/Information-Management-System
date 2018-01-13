@@ -81,7 +81,7 @@ function check_queries($attribute){
 	}
 }
 
-function dislplay_alerts($type,$link,$message){
+function display_alerts($type,$link,$message){
 	echo '<div class="container">
 			<div class="row">
 				<div class="col-md-3"></div>
@@ -94,5 +94,5 @@ function dislplay_alerts($type,$link,$message){
 				<div class="col-md-3"></div>
 			</div>
 		</div>';
-}
+	}
  ?>

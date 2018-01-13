@@ -210,13 +210,24 @@ if(isset($_POST["update"])){
 			update_query();
 		}
 		else{
-			dislplay_alerts("warning","reg_advanced_search.php","There is no new contribution");
+			display_alerts("warning","reg_advanced_search.php","There is no new contribution");
 		}
 	}
 	 echo "<div class='container'><div class='row'><div class='col-md-9'><textarea class='form-control' rows='6' cols='25' readonly>". show_query()."</textarea></div></div></div>";
 }
 	?>
 </div>
+<script type="text/javascript">
 
+$(document).ready(function () {
+
+window.setTimeout(function() {
+    $(".alert").fadeTo(1500, 0).slideUp(500, function(){
+        $(this).remove();
+    });
+}, 3000);
+
+});
+</script>
 </body>
 </html>

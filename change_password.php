@@ -61,7 +61,8 @@ $password=$_SESSION['password'];
 		</div>
 		<div class="row" align="right">
 			<div class="col-md-4"><h4>New Password</h4></div>
-			<div class="col-md-4"><input class="form-control" type="password" name="new_password" required></div>
+			<div class="col-md-4"><input class="form-control" type="password" name="new_password" id="new_password" required></div>
+			<div class="col-md-1" align="left"><a class="btn" onclick="myFunction()"><span class="glyphicon glyphicon-eye-open"></span></a></div>
 		</div>
 		<div class="row" align="right">
 			<div class="col-md-4"><h4>Re-enter Password</h4></div>
@@ -73,20 +74,41 @@ $password=$_SESSION['password'];
 		</div>
 	</div>
 </form>
+<script type="text/javascript">
 
+$(document).ready(function () {
+
+window.setTimeout(function() {
+    $(".alert").fadeTo(1500, 0).slideUp(500, function(){
+        $(this).remove();
+    });
+}, 3000);
+
+});
+
+function myFunction() {
+    var x = document.getElementById("new_password");
+    if (x.type === "password") {
+        x.type = "text";
+    } else {
+        x.type = "password";
+    }
+}
+</script>
 </body>
 <?php
 		//displaying alerts & updating passwords
 		if(isset($_POST['change'])){
 			if($_POST['old_password']!=$password){
-				dislplay_alerts("info","change_password.php","Old password is not correct");
+				display_alerts("info","change_password.php","Old password is not correct");
 			}else{
 				if($_POST['new_password']!=$_POST['rnew_password']){
-					dislplay_alerts("info","change_password.php","New password are not matching");
+					display_alerts("info","change_password.php","New password are not matching");
 				}
 				else{
 					//updating passwords
-					$update_password_query="UPDATE `members_login_details` SET `Password` = '".$_POST['new_password']."' WHERE `members_login_details`.`MembershipID` = '".$memID."'";
+					$new_password=sha1($_POST['new_password']);
+					$update_password_query="UPDATE `members_login_details` SET `Password` = '".$new_password."' WHERE `members_login_details`.`MembershipID` = '".$memID."'";
 					$is_update_firstname_query_run=mysqli_query($connect,$update_password_query );
 					$_SESSION['password']=$_POST['new_password'];
 					if($memID=="reg000"){header ('location:reg.php');}

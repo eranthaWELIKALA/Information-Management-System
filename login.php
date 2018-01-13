@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <?php
 session_start();session_destroy();
+//importing pages
+	require 'connect.php';require 'function.php';
 ?>
 
 <html>
 <head>
 	<title>LOGIN</title>
-	<link rel="stylesheet" href="bootstrap.min.css">
-	<script src="jquery.min.js"></script>
-	<script src="bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -53,7 +52,7 @@ session_start();session_destroy();
 		<div class="col-md-8" align="center"><h2><font color="#FF2400">Old Boy Association - Login</font></h2></div>
 		<div class="col-md-2">
 			<ul class="nav nav-pills">
-				<li><a href="home.php"><span class="glyphicon glyphicon-home" style="color:#FFFFFF"></span><font color="#FFFFFF"> Home</font></a></li>
+				<li><a href="index.php"><span class="glyphicon glyphicon-home" style="color:#FFFFFF"></span><font color="#FFFFFF"> Home</font></a></li>
 				<li class="active"><a><span class="glyphicon glyphicon-user"></span> Login</a></li>
 			</ul>
 		</div>
@@ -94,6 +93,17 @@ session_start();session_destroy();
 	</form>
 </div>
 <script type="text/javascript">
+
+$(document).ready(function () {
+
+		window.setTimeout(function() {
+		    $(".alert").fadeTo(1500, 0).slideUp(500, function(){
+		        $(this).remove();
+		    });
+		}, 3000);
+
+		});
+
 function myFunction() {
 		var x = document.getElementById("password");
 		if (x.type === "password") {
@@ -119,7 +129,7 @@ if(isset($_POST["submit"])){
 		session_start();
 		require 'connect.php';
 		$memID = mysqli_real_escape_string($connect, $_POST['memID']);
-		$password = mysqli_real_escape_string($connect, $_POST['password']);
+		$password = sha1(mysqli_real_escape_string($connect, $_POST['password']));
 		$query="SELECT * FROM members_login_details WHERE MembershipID='{$memID}' AND Password='{$password}' LIMIT 1";
 		if($is_query_run=mysqli_query($connect,$query)){
 			if(mysqli_num_rows($is_query_run) == 1){
@@ -139,17 +149,8 @@ if(isset($_POST["submit"])){
 					header ("location:user.php");
 				}
 			}
-			else{ echo '<div class="container">
-						<div class="row">
-							<div class="col-md-4"></div>
-							<div class="col-md-4">
-								<div class="alert alert-danger alert-dismissable">
-								<a href="login.php" class="close" data-dismiss="alert" arial-label="close">&times</a>
-								<strong>Incorrect username or password</strong></div><br>
-							</div>
-							<div class="col-md-4"></div>
-						</div>
-					</div>';
+			else{ 
+				display_alerts("danger","login.php","<p align='center'>Incorrect username or password.</p>");
 			}
 		}
 

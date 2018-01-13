@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <?php
 session_start();session_destroy();
+
+//importing pages
+require 'connect.php';require 'function.php';
 ?>
 
 <html>
@@ -55,7 +58,7 @@ session_start();session_destroy();
 		<div class="col-md-6" align="center"><h2><font color="#FF2400">Old Boy Association - Temporary Login</font></h2></div>
 		<div class="col-md-3">
 			<ul class="nav nav-pills">
-				<li><a href="home.php"><span class="glyphicon glyphicon-home" style="color:#FFFFFF"></span><font color="#FFFFFF"> Home</font></a></li>
+				<li><a href="index.php"><span class="glyphicon glyphicon-home" style="color:#FFFFFF"></span><font color="#FFFFFF"> Home</font></a></li>
 				<li><a href="login.php"><span class="glyphicon glyphicon-user" style="color:#FFFFFF"><font color="#FFFFFF"></span> Login</font></a></li>
 				<li class="active"><a><span>Temp</span> </a></li>
 			</ul>
@@ -86,7 +89,8 @@ session_start();session_destroy();
 		</div>
 		<div class="row" align="center">
 			<div class="col-md-4" align="right">Password : </div>
-			<div class="col-md-4"><input class="form-control" type="password" name="password" placeholder="ex: ****" required></div>
+			<div class="col-md-4"><input class="form-control" type="password" name="password" id="password" placeholder="ex: ****" required></div>
+			<div class="col-md-1" align="left"><a class="btn" onclick="myFunction()"><span class="glyphicon glyphicon-eye-open"></span></a></div>
 		</div><h6></h6>
 		<div class="row">
 			<div class="col-md-4"></div>
@@ -94,6 +98,27 @@ session_start();session_destroy();
 		</div>
 	</form>
 </div>
+<script type="text/javascript">
+
+$(document).ready(function () {
+
+window.setTimeout(function() {
+    $(".alert").fadeTo(1500, 0).slideUp(500, function(){
+        $(this).remove();
+    });
+}, 3000);
+
+});
+
+function myFunction() {
+		var x = document.getElementById("password");
+		if (x.type === "password") {
+				x.type = "text";
+		} else {
+				x.type = "password";
+		}
+}
+</script>
 
 </body>
 </html>
@@ -111,7 +136,7 @@ if(isset($_POST["submit"])){
 		session_start();
 		require 'connect.php';
 		$admission = mysqli_real_escape_string($connect, $_POST['admission']);
-		$password = mysqli_real_escape_string($connect, $_POST['password']);
+		$password = sha1(mysqli_real_escape_string($connect, $_POST['password']));
 		$query="SELECT * FROM temp_login_details WHERE Admission='{$admission}' AND Password='{$password}' LIMIT 1";
 		if($is_query_run=mysqli_query($connect,$query)){
 			if(mysqli_num_rows($is_query_run) == 1){
@@ -120,17 +145,8 @@ if(isset($_POST["submit"])){
 				//$row =  mysqli_fetch_assoc($is_query_run);
 					header ("location:temp_user.php");
 			}
-			else{ echo '<div class="container">
-						<div class="row">
-							<div class="col-md-4"></div>
-							<div class="col-md-4">
-								<div class="alert alert-danger alert-dismissable">
-								<a href="login.php" class="close" data-dismiss="alert" arial-label="close">&times</a>
-								<strong>Incorrect admission number or password</strong></div><br>
-							</div>
-							<div class="col-md-4"></div>
-						</div>
-					</div>';
+			else{ 
+				display_alerts("danger","login.php","Incorrect admission number or password.");
 			}
 		}
 

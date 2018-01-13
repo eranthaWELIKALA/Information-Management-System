@@ -125,7 +125,8 @@ if(isset($_POST["update"])){
 		else{
 			//header('location:user.php');
 		}
-	
+	$delete_edit_request_query="DELETE FROM `edit_requests` WHERE `edit_requests`.`MembershipID` = '".$memID."' ";
+	$is_delete_edit_query_run=mysqli_query($connect,$delete_edit_request_query);
 	header ("location:user.php");
 }
 
@@ -149,13 +150,7 @@ if(isset($_POST["update"])){
     <div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-			<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-tasks"></span> Options<span class="caret"></span></a>
-			<ul class="dropdown-menu">
-				<li><a href="change_password.php"><span class="glyphicon glyphicon-pushpin"></span> Change Password</a></li>
-				<li><a href="edit_request.php"><span class="glyphicon glyphicon-plus"></span> Send An Editing Request</a></li>
-				<li><a href="login.php"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
-			</ul>
-			</li>
+			<li><a href="user.php"><span class="glyphicon glyphicon-chevron-left"></span> Back</a></li>
         </ul>
       </div>
     </div>
@@ -164,65 +159,10 @@ if(isset($_POST["update"])){
 
 <br>
 <br>
-<?php
-	if(isset($_SESSION['edit_request_status'])){
-			if($_SESSION['edit_request_status']){
-				display_alerts('success','user.php','Editing request is sent successfully');
-			}
-		}
-?>
-<!--<div class="container" id="one">
-	<div class="row">
-	<div class="col-md-1">	</div>
-	<div class="col-md-2"><br><button type="button" class="btn btn-default" style="background-color:#ffd900" onclick="location.href='change_password.php';">Change Password</button></div>
-	<div class="col-md-7">	</div>
-	<div class="col-md-2"><h2></h2>
-	<div class="container" align="center">
-	<ul class="nav nav-pills">
-		<li class="active"><a href="#"><?php echo $memID;?></a></li>
-		<li><a href="login.php"><span class="glyphicon glyphicon-off" style="color:#ffd900"></span><font color="#fcd900"> Logout</font></a></li>
-	</ul>
-	</div><h2></h2>
-	</div>
-	</div>
-</div>-->
-
 <br>
 
-<div style="float:right;width:12%" >
-	<!--notification area-->
-		<div class='panel-group'><div class='panel panel-info'><div class='panel-heading'>Notifications</div>
-		<div class='panel-body'><table><tr><td>
-		<a href="recommendation.php"><span class="glyphicon glyphicon-???"></span>Requested Recommendations</a></td><td>
-		<span class="badge">
-				  <?php
-					$recommendation_query="SELECT COUNT(*) FROM signup_requests WHERE Recommendation1='$memID' or Recommendation2='$memID'";
-					$is_recommendation_query_run=mysqli_query($connect,$recommendation_query);
-					$recommendation_query_execute=mysqli_fetch_assoc($is_recommendation_query_run);
-					echo $recommendation_query_execute['COUNT(*)'];
-					?>
-			  </span></td></tr>
-		<?php 
-		$editing_approval_query="SELECT * FROM edit_requests WHERE MembershipID='".$memID."'";
-		$is_editing_approval_query_run=mysqli_query($connect,$editing_approval_query);
-		$editing_approval_query_execute=mysqli_fetch_assoc($is_editing_approval_query_run);
-		if($editing_approval_query_execute['Seen']==1){
-			echo "<tr><td>
-			<a href='user_edit.php'><span class='glyphicon glyphicon-???'></span>Editing Approvals</a></td><td>
-			</td></tr>";
-		}
-		?>	  
-			  
-			  </table>
-		</div></div></div>
-
-
-
-</div>
-
-
 <div style="float:left;width:80%">
-<form enctype="multipart/form-data" action="user.php" method="post">
+<form enctype="multipart/form-data" action="user_edit.php" method="post">
 	<div class="container" align="center" style="background-color:#AFEEEE">
 		<div class="container-fluid" style="background-color:#00EEEE"><h2>Contact Details</h2></div><h2></h2>
 
@@ -230,7 +170,6 @@ if(isset($_POST["update"])){
 			<div class="col-md-7"></div>
 			<div class="col-md-3">
 					<input class="form-control" type="file" name="image" id="">
-					<!--<button type="button" class="btn btn-default" onclick='location.href="uploadPic.php"'>Upload a New Picture</button>-->
 			 </div>
 			<div class="col-md-2"> <?php if($query_execute['Pic']!=NULL){echo "<img src = '".$query_execute['Pic']."' style = 'height:150px;width:150px'>";}else{echo "<img src = 'pics/default.png' style = 'height:150px;width:150px'>";} ?> </div>
 		</div>
@@ -238,7 +177,7 @@ if(isset($_POST["update"])){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>First Name </label></div>
-			<div class="col-md-4"><input class="form-control" type="text" name="firstname" readonly value="<?php
+			<div class="col-md-4"><input class="form-control" type="text" name="firstname" value="<?php
 																										echo $query_execute['Firstname'];
 																										refresh('Firstname');
 																									?>">
@@ -250,7 +189,7 @@ if(isset($_POST["update"])){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>Last Name </label></div>
-			<div class="col-md-4"><input class="form-control" type="text" name="lastname" readonly value="<?php
+			<div class="col-md-4"><input class="form-control" type="text" name="lastname" value="<?php
 																									echo $query_execute['Lastname'];
 																									refresh('Lastname');
 																								?>">
@@ -316,8 +255,10 @@ if(isset($_POST["update"])){
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-2" align="left"><label>Birthday</label></div>
-			<div class="col-md-4"><?php if($query_execute["Birthday"]==NULL){ echo '<input class="form-control" type="date" name="birthday" placeholder="YYYY-MM-DD">';}
-			else{ echo '<input class="form-control" type="date" value="'.$query_execute["Birthday"].'" readonly>';}?>
+			<div class="col-md-4"><input class="form-control" type="date" name="birthday" placeholder="YYYY-MM-DD" value=<?php
+																														echo $query_execute["Birthday"];
+																																	refresh('Birthday');
+																															?> >
 			</div>
 		</div>
 
@@ -406,17 +347,6 @@ if(isset($_POST["update"])){
 	</div>
 </form>
 </div>
-<script type="text/javascript">
 
-$(document).ready(function () {
-
-window.setTimeout(function() {
-    $(".alert").fadeTo(1500, 0).slideUp(500, function(){
-        $(this).remove();
-    });
-}, 3000);
-
-});
-</script>
 </body>
 </html>

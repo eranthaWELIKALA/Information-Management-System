@@ -16,7 +16,7 @@ if($_SESSION["memID"]!="sec000"){
 
 if(isset($_POST['search']) && isset($_POST['search_memID'])){
 	if(!seach_query()){
-		dislplay_alerts("danger","sec.php","There is no account from this membershipID");
+		display_alerts("danger","sec.php","There is no account from this membershipID");
 	}
 }
 ?>
@@ -49,17 +49,31 @@ body{
 	</head>
 	<body>
 
-<div class="container-fluid" id="one"><h2></h2>
-	<div class="col-md-10"></div>
-	<ul class="nav nav-pills">
-		<li class="active"><a href="#">Secretary</a></li>
-		<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-tasks"></span> Options<span class="caret"></span></a>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Secretary</a>
+    </div>
+    <div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+			<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-tasks"></span> Options<span class="caret"></span></a>
 			<ul class="dropdown-menu">
 				<li><a href="change_password.php"><span class="glyphicon glyphicon-pushpin"></span> Change Password</a></li>
 				<li><a href="login.php"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
 			</ul>
-	</li></ul>
-</div><h2></h2>
+			</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+<h2></h2>
 
 
 <div class='container'>
@@ -142,6 +156,17 @@ if(isset($_POST['searchN'])){
 }
 
 ?>
+<script type="text/javascript">
 
+$(document).ready(function () {
+
+window.setTimeout(function() {
+    $(".alert").fadeTo(1500, 0).slideUp(500, function(){
+        $(this).remove();
+    });
+}, 3000);
+
+});
+</script>
 </body>
 </html>

@@ -24,7 +24,7 @@
 			//calculate age
 			//echo strtotime(date("d/m/Y"));
 			$date1=date_create($query_execute["Birthday"]);
-			$date2=date_create(date("d/m/Y"));
+			$date2=date_create(strtotime(date("d/m/Y")));
 			$age=date_diff($date1,$date2);
 		}
 		if($is_contribution_details_query_run=mysqli_query($connect,$contribution_details_query)){
@@ -171,21 +171,6 @@ if(isset($_POST["update"])){
 			}
 		}
 ?>
-<!--<div class="container" id="one">
-	<div class="row">
-	<div class="col-md-1">	</div>
-	<div class="col-md-2"><br><button type="button" class="btn btn-default" style="background-color:#ffd900" onclick="location.href='change_password.php';">Change Password</button></div>
-	<div class="col-md-7">	</div>
-	<div class="col-md-2"><h2></h2>
-	<div class="container" align="center">
-	<ul class="nav nav-pills">
-		<li class="active"><a href="#"><?php echo $memID;?></a></li>
-		<li><a href="login.php"><span class="glyphicon glyphicon-off" style="color:#ffd900"></span><font color="#fcd900"> Logout</font></a></li>
-	</ul>
-	</div><h2></h2>
-	</div>
-	</div>
-</div>-->
 
 <br>
 

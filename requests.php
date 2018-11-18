@@ -50,11 +50,13 @@ body{
     <div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-			<li><a href="reg.php"><span class="glyphicon glyphicon-chevron-left"></span> Back</a></li>
-			<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-tasks"></span> Options<span class="caret"></span></a>
+          
+		  <li><a href="reg.php"><span class="glyphicon glyphicon-chevron-left"></span> Back</a></li>
+		  <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-tasks"></span> Options<span class="caret"></span></a>
 			<ul class="dropdown-menu">
 				<li><a href="change_password.php"><span class="glyphicon glyphicon-pushpin"></span> Change Password</a></li>
 				<li><a href="reg_advanced_signup.php"><span class="glyphicon glyphicon-plus"></span> Add Account</a></li>
+				<li><a href="add_event.php"><span class="glyphicon glyphicon-plus"></span> Add a Pic to Home</a></li>
 				<li><a href="login.php"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
 			</ul>
 			</li>

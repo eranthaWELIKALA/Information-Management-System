@@ -26,22 +26,23 @@ require 'connect.php';require 'function.php';
 		#one{
 			width:100%;
 			height:100%;
-			background-image:url('background-6.jpg');
+			background-color:#157DEC;
 			background-position: center;
 			background-size:cover;
 		}
 		.nav-pills > li.active > a, .nav-pills > li.active > a:focus {
 			color: black;
-			background-color: #810541;
+			background-color: #FFFFFF;
 		}
-		.nav-pills > li.inactive{
-			background-color: #00000;
-			border-radius:5px;
-		}
-        .nav-pills > li.active > a:hover {
-            background-color: #810541;
+		.nav-pills > li.active > a:hover {
+            background-color: #000000;
             color:white;
         }
+		.nav-pills > li.inactive{
+			color:black;
+			background-color: #000000;
+			border-radius:5px;
+		}
 		.form-control.submit{
 			background-color: #800000;
 		}
@@ -55,11 +56,11 @@ require 'connect.php';require 'function.php';
 	<br>
 	<div class="row">
 		<div class="col-md-3"></div>
-		<div class="col-md-6" align="center"><h2><font color="#FF2400">Old Boy Association - Temporary Login</font></h2></div>
+		<div class="col-md-6" align="center"><h2><font color="#FFFFFF">Old Boys Association - Temporary Login</font></h2></div>
 		<div class="col-md-3">
 			<ul class="nav nav-pills">
-				<li><a href="index.php"><span class="glyphicon glyphicon-home" style="color:#FFFFFF"></span><font color="#FFFFFF"> Home</font></a></li>
-				<li><a href="login.php"><span class="glyphicon glyphicon-user" style="color:#FFFFFF"><font color="#FFFFFF"></span> Login</font></a></li>
+				<li><a href="index.php"><span class="glyphicon glyphicon-home" style="color:#000000"></span><font color="#000000"> Home</font></a></li>
+				<li><a href="login.php"><span class="glyphicon glyphicon-user" style="color:#000000"><font color="#000000"></span> Login</font></a></li>
 				<li class="active"><a><span>Temp</span> </a></li>
 			</ul>
 		</div>
@@ -74,7 +75,7 @@ require 'connect.php';require 'function.php';
 	<fieldset>
 	<div class="container" align="center" >
 		<div>
-		<img src="login-3.png" class="img-circle" alt="Cinque Terre" width="176" height="176">
+		<img src="login.png" class="img-circle" alt="Cinque Terre" width="176" height="176">
 		</div>
 	</div>
 	</fieldset>
@@ -84,11 +85,11 @@ require 'connect.php';require 'function.php';
 	<!--login form area-->
 	<form action="temp_login.php" method="post">
 		<div class="row">
-			<div class="col-md-4" align="right">Admission No. : </div>
+			<div class="col-md-4" align="right"><font color="#ff0000">Admission No. : </font></div>
 			<div class="col-md-4"><input class="form-control" type="text" name="admission" placeholder="ex: 123" required></div>
 		</div>
 		<div class="row" align="center">
-			<div class="col-md-4" align="right">Password : </div>
+			<div class="col-md-4" align="right"><font color="#ff0000">Password : </font></div>
 			<div class="col-md-4"><input class="form-control" type="password" name="password" id="password" placeholder="ex: ****" required></div>
 			<div class="col-md-1" align="left"><a class="btn" onclick="myFunction()"><span class="glyphicon glyphicon-eye-open"></span></a></div>
 		</div><h6></h6>

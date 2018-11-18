@@ -87,6 +87,9 @@ body{
 				<div class="col-md-2">
 					<input class="form-control" type="submit" name="searchN" value="Search by Name">
 				</div>
+				<div class='col-md-2'>
+				<input class='form-control' type='button' name='seeall' onclick="location.href='reg_all.php'" value='SEE ALL'>
+				</div>
 			</form>
 			</div>
 			<div class='row'>
@@ -99,9 +102,9 @@ body{
 				<div class='col-md-2'>
 				<input class='form-control' type='submit' name='search' value='Search by ID'>
 				</div>
-				<div class='col-md-2'>
+				<!-- <div class='col-md-2'>
 				<input class='form-control' type='button' name='advanced_search' onclick="location.href='reg_advanced_search.php'" value='Advanced Search'>
-				</div>
+				</div> -->
 				</form>
 			</div>
 			<h2></h2>
@@ -120,6 +123,7 @@ body{
 		<span class="badge">
 				  <?php
 				  $requests1_query="SELECT COUNT(*) FROM signup_requests WHERE Accepted=false AND Recommendation1_Accept=true AND Recommendation2_Accept=true";
+				  //$requests1_query="SELECT COUNT(*) FROM signup_requests WHERE Accepted=false";
 				  notification($requests1_query);
 					?>
 			  </span>

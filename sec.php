@@ -73,7 +73,7 @@ body{
     </div>
   </div>
 </nav>
-<h2></h2>
+<br><br>
 
 
 <div class='container'>
@@ -88,6 +88,9 @@ body{
 		<div class="col-md-2">
 			<input class="form-control" type="submit" name="searchN" value="Search by Name">
 		</div>
+		<div class='col-md-2'>
+				<input class='form-control' type='button' name='seeall' onclick="location.href='sec_all.php'" value='SEE ALL'>
+				</div>
 	</form>
 	</div>
 	<div class='row'>

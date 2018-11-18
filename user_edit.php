@@ -24,7 +24,7 @@
 			//calculate age
 			//echo strtotime(date("d/m/Y"));
 			$date1=date_create($query_execute["Birthday"]);
-			$date2=date_create(date("d/m/Y"));
+			$date2=date_create(strtotime(date("d/m/Y")));
 			$age=date_diff($date1,$date2);
 		}
 		if($is_contribution_details_query_run=mysqli_query($connect,$contribution_details_query)){

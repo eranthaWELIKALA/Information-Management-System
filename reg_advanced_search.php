@@ -23,20 +23,20 @@
 
 //updating attributes
 if(isset($_POST["update"])){
-	$update_firstname_query="UPDATE `member_details` SET `Firstname` = '".$_POST["firstname"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_lastname_query="UPDATE `member_details` SET `Lastname` = '".$_POST["lastname"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_address1_query="UPDATE `member_details` SET `Address1` = '".$_POST["address1"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_address2_query="UPDATE `member_details` SET `Address2` = '".$_POST["address2"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_mobile_query="UPDATE `member_details` SET `Mobile` = '".$_POST["mobile"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_fixed_query="UPDATE `member_details` SET `Fixed` = '".$_POST["fixed"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_email_query="UPDATE `member_details` SET `Email` = '".$_POST["email"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_birthday_query="UPDATE `member_details` SET `Birthday` = '".$_POST["birthday"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_nic_query="UPDATE `member_details` SET `NIC` = '".$_POST["nic"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_occupation_query="UPDATE `member_details` SET `Occupation` = '".$_POST["occupation"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_civil_status_query="UPDATE `member_details` SET `Civil_status` = '".$_POST["civil_status"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_addmission_query="UPDATE `member_details` SET `Admission` = '".$_POST["admission"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_begin_query="UPDATE `member_details` SET `Begin` = '".$_POST["begin"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
-	$update_end_query="UPDATE `member_details` SET `End` = '".$_POST["end"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	$update_firstname_query="SELECT * `member_details` WHERE `Firstname` = '".$_POST["firstname"]."'";
+	$update_lastname_query="SELECT * `member_details` WHERE `Lastname` = '".$_POST["lastname"]."'";
+	$update_address1_query="SELECT * `member_details` WHERE `Address1` = '".$_POST["address1"]."'";
+	$update_address2_query="SELECT * `member_details` WHERE `Address2` = '".$_POST["address2"]."'";
+	$update_mobile_query="SELECT * `member_details` WHERE `Mobile` = '".$_POST["mobile"]."'";
+	$update_fixed_query="SELECT * `member_details` WHERE `Fixed` = '".$_POST["fixed"]."'";
+	$update_email_query="SELECT * `member_details` WHERE `Email` = '".$_POST["email"]."'";
+	$update_birthday_query="SELECT * `member_details` WHERE `Birthday` = '".$_POST["birthday"]."'";
+	$update_nic_query="SELECT * `member_details` WHERE `NIC` = '".$_POST["nic"]."'";
+	$update_occupation_query="SELECT * `member_details` WHERE `Occupation` = '".$_POST["occupation"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	$update_civil_status_query="SELECT * `member_details` WHERE `Civil_status` = '".$_POST["civil_status"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	$update_addmission_query="SELECT * `member_details` WHERE `Admission` = '".$_POST["admission"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	$update_begin_query="SELECT * `member_details` WHERE `Begin` = '".$_POST["begin"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
+	$update_end_query="SELECT * `member_details` WHERE `End` = '".$_POST["end"]."'  WHERE `member_details`.`MembershipID` = '".$memID."'";
 
 	if(isset($_POST["firstname"])){$is_update_firstname_query_run=mysqli_query($connect,$update_firstname_query );}
 	if(isset($_POST["lastname"])){$is_update_lastname_query_run=mysqli_query($connect,$update_lastname_query );}

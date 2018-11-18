@@ -50,11 +50,13 @@ body{
     <div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-			<li><a href="reg.php"><span class="glyphicon glyphicon-chevron-left"></span> Back</a></li>
-			<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-tasks"></span> Options<span class="caret"></span></a>
+          
+		  <li><a href="reg.php"><span class="glyphicon glyphicon-chevron-left"></span> Back</a></li>
+		  <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-tasks"></span> Options<span class="caret"></span></a>
 			<ul class="dropdown-menu">
 				<li><a href="change_password.php"><span class="glyphicon glyphicon-pushpin"></span> Change Password</a></li>
 				<li><a href="reg_advanced_signup.php"><span class="glyphicon glyphicon-plus"></span> Add Account</a></li>
+				<li><a href="add_event.php"><span class="glyphicon glyphicon-plus"></span> Add a Pic to Home</a></li>
 				<li><a href="login.php"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
 			</ul>
 			</li>
@@ -82,9 +84,9 @@ if($is_requests_query_run=mysqli_query($connect,$requests_query)){
 }
 
 $requests_query="SELECT * FROM edit_requests WHERE Seen=0";
-
+$itr1=0;
 if($is_requests_query_run=mysqli_query($connect,$requests_query)){
-	$itr1=0;
+	
 	echo "<div class='container'><table class='table table-striped'><thead><tr><th>Firstname</th><th>Lastname</th><th></th></tr></thead><tbody>";
 	while($requests_query_execute=mysqli_fetch_assoc($is_requests_query_run)){
 		$membershipId=$requests_query_execute['MembershipID'];

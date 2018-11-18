@@ -45,10 +45,15 @@ session_destroy(); ?>
 		}
 
 		a:link{color:#FFFF}
-
 		.carousel .item{
-			height: 200px;
+			height: 400px;
 		}
+		@media screen and (max-width: 992px) {
+            .carousel .item{
+    			height:150px;
+    		}
+		}
+
 	</style>
 </head>
 
@@ -100,7 +105,7 @@ session_destroy(); ?>
 			<p align="center">
 				<div class="row">
 					<div class="col-md-4" align="right"><h4><font color="#FFFFFF">Admissioon No. : </font></h4></div>
-					<div class="col-md-4"><input class="form-control" type="text" name="admission" placeholder="ex: 123" required oninvalid="this.setCustomValidity('Please Enter an username')" oninput="setCustomValidity('')"></div>
+					<div class="col-md-4"><input class="form-control" type="text" name="admission" placeholder="ex: 123" required oninvalid="this.setCustomValidity('Please Enter an Admission no.')" oninput="setCustomValidity('')"></div>
 				</div>
 				<div class="row">
 					<div class="col-md-4" align="right"><h4><font color="#FFFFFF">Password: </font></h4></div>
@@ -115,6 +120,10 @@ session_destroy(); ?>
 			<div class="row">
 				<div class="col-md-4" align="right"></div>
 				<div div class="col-md-4" align="center"><a href="login.php"><font color="#ffff00"><h4>Already Have an Account?</h4></font></a></div>
+			</div>
+			<div class="row">
+				<div class="col-md-4" align="right"></div>
+				<div div class="col-md-4" align="center"><a href="help.php"><font color="#ffff00">Click here for help</font></a></div>
 			</div>
 	</div>
 
@@ -134,38 +143,34 @@ session_destroy(); ?>
 			</ol>
 
 			<!-- Wrapper for slides -->
+
+			<!-- Wrapper for slides -->
+
 			<?php
 				$home_pics_query="SELECT * FROM home";
 				$is_home_pics_query=mysqli_query($connect,$home_pics_query);
 				$itr=1;
-				echo "<div class='carousel-inner' style='max-height: 100%, max-width:50%'>";
+				echo "<div class='carousel-inner'>";
 				while($home_pics_query_execute=mysqli_fetch_assoc($is_home_pics_query)){
 					$pic=$home_pics_query_execute['Pic'];
 					if($itr==1){
 						echo "<div class='item active'>
-					<img src='".$pic."' style='height:100%;width:100%;'>
+					<img src='".$pic."' width='100%'>
 					</div>";
 					}
 					else{
 					echo "<div class='item'>
-					<img src='".$pic."' style='height:100%;width:100%;'>
+					<img src='".$pic."' width='100%'>
+					<div class='carousel-caption'>
+                						    ".home_pics_query_execute['Description']."
+                						</div>
 					</div>";
 					}$itr++;
 				}
 				echo "</div>";
 			?>
-
-			<!-- Left and right controls -->
-			<a class="left carousel-control" href="#myCarousel" data-slide="prev" width="300" height="300">
-			   <span class="glyphicon glyphicon-chevron-left"></span>
-			  <span class="sr-only">Previous</span>
-			</a>
-
-			<a class="right carousel-control" href="#myCarousel" data-slide="next">
-			   <span class="glyphicon glyphicon-chevron-right"></span>
-			  <span class="sr-only">Next</span>
-			</a>
-
+				<a href="#imageCarousel" class="carousel-control left" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+				<a href="#imageCarousel" class="carousel-control right" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
 		  </div>
 		</div>
 	</div>

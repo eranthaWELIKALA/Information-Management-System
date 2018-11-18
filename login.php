@@ -22,23 +22,25 @@ session_start();session_destroy();
 		#one{
 			width:100%;
 			height:100%;
-			background-image:url('background-6.jpg');
+			background-color:#157DEC;
 			background-position: center;
 			background-size:cover;
 		}
 		.nav-pills > li.active > a, .nav-pills > li.active > a:focus {
 			color: black;
-			background-color: #810541;
+			background-color: #FFFFFF;
 		}
-		.nav-pills > li.inactive{
-			background-color: #ADD8E6;
-			border-radius:5px;
-		}
-
-        .nav-pills > li.active > a:hover {
+		.nav-pills > li.active > a:hover {
             background-color: #000000;
             color:white;
         }
+		.nav-pills > li.inactive{
+			color:black;
+			background-color: #000000;
+			border-radius:5px;
+		}
+
+        
 	</style>
 </head>
 
@@ -49,10 +51,10 @@ session_start();session_destroy();
 	<br>
 	<div class="row">
 		<div class="col-md-2"></div>
-		<div class="col-md-8" align="center"><h2><font color="#FF2400">Old Boy Association - Login</font></h2></div>
+		<div class="col-md-8" align="center"><h2><font color="#FFFFFF">Old Boys Association - Login</font></h2></div>
 		<div class="col-md-2">
 			<ul class="nav nav-pills">
-				<li><a href="index.php"><span class="glyphicon glyphicon-home" style="color:#FFFFFF"></span><font color="#FFFFFF"> Home</font></a></li>
+				<li><a href="index.php"><span class="glyphicon glyphicon-home" style="color:#000000"></span><font color="#000000"> Home</font></a></li>
 				<li class="active"><a><span class="glyphicon glyphicon-user"></span> Login</a></li>
 			</ul>
 		</div>
@@ -67,7 +69,7 @@ session_start();session_destroy();
 	<fieldset>
 	<div class="container" align="center" >
 		<div>
-		<img src="login-3.png" class="img-circle" alt="Cinque Terre" width="176" height="176">
+		<img src="login.png" class="img-circle" alt="Cinque Terre" width="176" height="176">
 		</div>
 	</div>
 	</fieldset>
@@ -132,7 +134,9 @@ if(isset($_POST["submit"])){
 		$password = sha1(mysqli_real_escape_string($connect, $_POST['password']));
 		$query="SELECT * FROM members_login_details WHERE MembershipID='{$memID}' AND Password='{$password}' LIMIT 1";
 		if($is_query_run=mysqli_query($connect,$query)){
+			$query_execute=mysqli_fetch_assoc($is_query_run);
 			if(mysqli_num_rows($is_query_run) == 1){
+				if($memID==$query_execute['MembershipID'] && $password==$query_execute['Password']){
 				$_SESSION['memID']=$_POST["memID"];
 				$_SESSION['password']=$_POST["password"];
 				//$row =  mysqli_fetch_assoc($is_query_run);
@@ -148,6 +152,9 @@ if(isset($_POST["submit"])){
 				else{
 					header ("location:user.php");
 				}
+				}else{ 
+				display_alerts("danger","login.php","<p align='center'>Incorrect username or password.</p>");
+			}
 			}
 			else{ 
 				display_alerts("danger","login.php","<p align='center'>Incorrect username or password.</p>");

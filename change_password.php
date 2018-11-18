@@ -52,6 +52,26 @@ $password=$_SESSION['password'];
 </head>
 
 <body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#"><?php echo "<b>".$_SESSION['memID']."</b>"; ?></a>
+    </div>
+    <div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+			<li><a href="<?php if($memID=="reg000"){echo "reg.php";}else if($memID=="sec000"){echo "sec.php";}else{echo "user.php";}?>"><span class="glyphicon glyphicon-chevron-left"></span> Back</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
 <button type="button" class="btn btn-default" onclick='location.href="<?php if($memID=="reg000"){echo "reg.php";}else if($memID=="sec000"){echo "sec.php";}else{echo "user.php";}?>";'><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
 <form action="change_password.php" method="post">
 	<div class="container"><br><br><h1 align='center'>Change Password</h1><br><br>

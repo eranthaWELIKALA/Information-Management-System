@@ -156,8 +156,8 @@ if(isset($_POST["signup_submit"])){
 			</div><h6></h6>
 			<div class="row">
 				<div class="col-md-4" align="right"><label><font color="#FFFFFF">Add Recommendations </font></label></div>
-				<div class="col-md-3" align="right"> <input class="form-control" type="text" name="recommendation1" title="Enter admission no." required></div>
-				<div class="col-md-3" align="right"> <input class="form-control" type="text" name="recommendation2" title="Enter admission no." required></div>
+				<div class="col-md-3" align="right"> <input class="form-control" type="text" name="recommendation1" placeholder="admission no." title="Enter admission no." required></div>
+				<div class="col-md-3" align="right"> <input class="form-control" type="text" name="recommendation2" placeholder="admission no." title="Enter admission no." required></div>
 			</div><h6></h6>
 			<div class="row">
 				<div class="col-md-4" align="right"><label><font color="#FFFFFF">Password </font></label> </div>
